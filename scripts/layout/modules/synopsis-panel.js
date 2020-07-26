@@ -1,19 +1,19 @@
 import {MainPanel} from './main-panel.js';
-import {MainTitle, MainSection} from '../atoms/atoms.js'; 
-import {Tab} from '../controls/tab.js'; 
-import {Panel} from '../controls/panel.js'; 
-import {ButtonGroup} from '../controls/button-group.js'; 
+import {MainTitle, MainSection} from '../atoms/atoms.js';
+import {Tab} from '../controls/tab.js';
+import {Panel} from '../controls/panel.js';
+import {ButtonGroup} from '../controls/button-group.js';
 
 export class SynopsisPanel extends MainPanel
-{ 
+{
 	render()
-	{ 
-        var route = this.route; 
+	{
+        var route = this.route;
 
 		return MainSection(
 		{
-			className: 'synopsis-panel', 
-			children: 
+			className: 'synopsis-panel',
+			children:
 			[
 				MainTitle({
                     text: 'Synopsis',
@@ -21,16 +21,16 @@ export class SynopsisPanel extends MainPanel
                         value: ['Synopsis [[page]]', route]
                     }
                 }),
-				{ 
+				{
 					tag: 'section',
 					className: 'body',
-					row: 
+					row:
 					{
 						className: 'row',
-						children: 
+						children:
 						[
 							{ className: 'col'},
-							{ 
+							{
                                 className: 'col',
                                 tab: new Tab(
                                 {
@@ -39,14 +39,14 @@ export class SynopsisPanel extends MainPanel
                                         this.createTab('Story', 'synopsis/story', 'this would tell about the story'),
                                         this.createTab('Book', 'synopsis/book', 'did thhis come from a book?'),
                                         this.createTab('Concepts', 'synopsis/concepts', ''),
-                                        this.createTab('More', 'synopsis/more', 'More...'), 
+                                        this.createTab('More', 'synopsis/more', 'More...'),
                                         {
-                                            label: 'Super Tab', 
-                                            href: 'synopsis/super', 
+                                            label: 'Super Tab',
+                                            href: 'synopsis/super',
                                             uri: 'synopsis/super*',
                                             component: new Panel(
                                             {
-                                                children: 
+                                                children:
                                                 [
                                                     {
                                                         text: 'before tab',
@@ -58,7 +58,7 @@ export class SynopsisPanel extends MainPanel
                                                             this.createTab('Story', 'synopsis/super/first', 'First'),
                                                             this.createTab('Book', 'synopsis/super/second', 'Second')
                                                         ]
-                                                    }), 
+                                                    }),
                                                     {
                                                         text: 'after tab'
                                                     },
@@ -68,7 +68,7 @@ export class SynopsisPanel extends MainPanel
                                                             this.createTab('Third', 'synopsis/super/thirds', 'another tab'),
                                                             this.createTab('Fourth', 'synopsis/super/fourth', 'too many tabs')
                                                         ]
-                                                    }), 
+                                                    }),
                                                     {
                                                         text: 'after both tabs'
                                                     }
@@ -82,14 +82,14 @@ export class SynopsisPanel extends MainPanel
 					}
 				}
 			]
-		}); 
-    } 
-    
+		});
+    }
+
     createTab(label, link, text)
     {
         return {
-            label, 
-            href: link, 
+            label,
+            href: link,
             component: new Panel(
             {
                 text: text

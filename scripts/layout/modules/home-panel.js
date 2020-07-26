@@ -4,8 +4,8 @@ import {Tag, MainTitle, MainSection, Button, H2, Label, Input, A, P} from '../at
 import {ButtonGroup} from '../controls/button-group.js';
 
 /**
- * This will create a row. 
- * 
+ * This will create a row.
+ *
  * @param {object} props
  * @return {object}
  */
@@ -22,12 +22,12 @@ const ParentModel = Model.extend(
 {
 	url: urlBase + 'parent',
 
-	xhr: 
+	xhr:
 	{
 		add(instanceParams, callBack)
-		{ 
-			let params = 'op=add' + 
-						 '&' + this.setupObjectData(); 
+		{
+			let params = 'op=add' +
+						 '&' + this.setupObjectData();
 
 			return this.request(params, instanceParams, callBack);
 		}
@@ -38,12 +38,12 @@ const TestModel = ParentModel.extend(
 {
 	url: urlBase + 'test',
 
-	xhr: 
+	xhr:
 	{
 		add(instanceParams, callBack)
-		{ 
-			let params = 'op=addTest' + 
-						 '&' + this.setupObjectData(); 
+		{
+			let params = 'op=addTest' +
+						 '&' + this.setupObjectData();
 
 			return this.request(params, instanceParams, callBack);
 		}
@@ -52,12 +52,12 @@ const TestModel = ParentModel.extend(
 
 /**
  * HomePanel
- * 
- * This will create a home panel. 
+ *
+ * This will create a home panel.
  * @class
  */
 export class HomePanel extends MainPanel
-{ 
+{
 	onCreated()
 	{
 		const name = {
@@ -71,10 +71,10 @@ export class HomePanel extends MainPanel
 	}
 
 	render()
-	{ 
+	{
 		return MainSection(
 		{
-			className: 'home-panel', 
+			className: 'home-panel',
 			onState: [
 				['loaded', {
 					loaded: true
@@ -105,15 +105,15 @@ export class HomePanel extends MainPanel
 						MainTitle({
 							text: 'Title'
 						}),
-						{ 
+						{
 							tag: 'section',
 							className: 'body',
 							row: Row(
 							{
-								children: 
+								children:
 								[
 									{ className: 'col'},
-									{ 
+									{
 										className: 'col',
 										children: [
 											new ButtonGroup(),
@@ -212,8 +212,8 @@ export class HomePanel extends MainPanel
 					]
 				}]
 			]
-		}); 
-	} 
+		});
+	}
 
 	setupStates()
 	{
@@ -221,7 +221,7 @@ export class HomePanel extends MainPanel
 			loaded: true
 		};
 	}
-	
+
 	toggleLoaded()
 	{
 		this.state.toggle('loaded');

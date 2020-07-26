@@ -1,8 +1,8 @@
-@import url('text.css'); 
+@import url('text.css');
 
-/* controls */ 
-@import url('controls/navigation.css'); 
+/* controls */
+@import url('controls/navigation.css');
 @import url('controls/tab.css');
 
-/* modules */ 
+/* modules */
 @import url('modules/main-panel.css');

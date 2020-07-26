@@ -6,8 +6,8 @@ export class ButtonGroup extends base.Component
 	render()
 	{
 		return {
-			className: 'button-group', 
-			children: 
+			className: 'button-group',
+			children:
 			[
 				P({
 					onState: ['performance', (ele, state) =>
@@ -39,7 +39,7 @@ export class ButtonGroup extends base.Component
 				this.state.set('performance', value)
 			}
 		});
-	} 
+	}
 
 	setupStates()
 	{

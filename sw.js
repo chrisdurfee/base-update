@@ -1,15 +1,15 @@
-importScripts('./scripts/worker/cache-controller.js', './scripts/worker/service.js'); 
+importScripts('./scripts/worker/cache-controller.js', './scripts/worker/service.js');
 
-const appName = 'app-name', 
+const appName = 'app-name',
 version = 1.0;
 
-const files = 
+const files =
 [
 	'./',
-	'./index.html', 
-	'./scripts/app.js', 
+	'./index.html',
+	'./scripts/app.js',
 	'./css/base.css'
-]; 
+];
 
 const appNameId = appName + '-v' + version;
-const service = new Service(appNameId, files); 
+const service = new Service(appNameId, files);
