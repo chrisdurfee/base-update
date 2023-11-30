@@ -1,4 +1,4 @@
-import { Atom, NavLink, base } from '../../base/base.js';
+import { Atom, Component, NavLink, base } from '../../base/base.js';
 import { H2, Span } from '../atoms/atoms.js';
 
 /**
@@ -7,13 +7,13 @@ import { H2, Span } from '../atoms/atoms.js';
  * This will setup a navigation link.
  * @class
  */
-export class MainLink extends base.Component
+export class MainLink extends Component
 {
 	render()
 	{
 		return {
 			tag: 'li',
-			className: 'option' + (this.options? ' sub' : ''),
+			class: 'option' + (this.options? ' sub' : ''),
 			a: this.addLink(),
 			click: !this.options? this.callBack : null
 		};
@@ -21,22 +21,23 @@ export class MainLink extends base.Component
 
 	addLink()
 	{
-		return this.cache('link', new NavLink(
+		return new NavLink(
 		{
+			cache: 'link',
 			href: this.href,
 			activeClass: 'selected',
 			exact: (this.options)? false : true,
 			children:
 			[
 				Span({
-					className: 'icon ' + (this.icon || '')
+					class: 'icon ' + (this.icon || '')
 				}),
 				{
-					className: 'label',
+					class: 'label',
 					text: this.label || ''
 				}
 			]
-		}));
+		});
 	}
 }
 
@@ -45,14 +46,12 @@ export class MainLink extends base.Component
  * @params {object} props
  * @return {object}
  */
-const NavigationGroup = Atom.extend(function(props)
+const NavigationGroup = Atom((props, children) =>
 {
 	return {
-		className: 'navigation-group',
-		text: H2({
-			text: props.text
-		}),
-		children: props.children || null
+		class: 'navigation-group',
+		text: H2(props.text),
+		nest: children
 	};
 });
 
@@ -62,17 +61,17 @@ const NavigationGroup = Atom.extend(function(props)
  * This will create a navigation component.
  * @class
  */
-export class Navigation extends base.Component
+export class Navigation extends Component
 {
 	render()
 	{
 		return {
 			tag: 'nav',
-			className: 'navigation',
+			class: 'navigation',
 			ul:
 			{
 				tag: 'ul',
-				children: this.addLinks(this.options)
+				nest: this.addLinks(this.options)
 			}
 		};
 	}
@@ -102,9 +101,8 @@ export class Navigation extends base.Component
 		var childLinks = this.addLinks(option.options);
 
 		return NavigationGroup({
-			text: option.group,
-			children: childLinks
-		});
+			text: option.group
+		}, childLinks);
 	}
 
 	addLink(option)
@@ -133,12 +131,12 @@ export class DeepNavigation extends Navigation
 	{
 		return {
 			tag: 'nav',
-			className: 'navigation' + (this.sub? ' sub' : ''),
+			class: 'navigation' + (this.sub? ' sub' : ''),
 			onState: this.onState(),
 			ul:
 			{
 				tag: 'ul',
-				children: this.addLinks(this.options)
+				nest: this.addLinks(this.options)
 			}
 		};
 	}

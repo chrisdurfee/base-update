@@ -30,14 +30,14 @@ export class SwitchLink extends base.Component
 
 		return {
 			tag: 'li',
-			className: 'option',
+			class: 'option',
 			a: {
 				tag: 'a',
-				className: this.className || null,
+				class: this.className || null,
 				onState: ['selected', onState],
 				href: this.getString(href),
 				text: this.getString(text),
-				children: this.children,
+				nest: this.children,
 				watch: watchers,
 				cache: 'link'
 			}
@@ -125,7 +125,7 @@ export class SwitchNavigation extends base.Component
 					value: ['[[path]]', this.data],
 					callBack: base.bind(this, this.updateLinks)
 				},
-				children: this.addLinks()
+				nest: this.addLinks()
 			}
 		};
 	}

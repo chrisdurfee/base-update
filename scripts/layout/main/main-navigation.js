@@ -1,21 +1,21 @@
-import { base } from '../../base/base.js';
+import { Component } from '../../base/base.js';
 import { A } from '../atoms/atoms.js';
 import { DeepNavigation } from '../controls/navigation.js';
 
-export class MainNavigation extends base.Component
+export class MainNavigation extends Component
 {
 	render()
 	{
 		return {
-			className: 'main-navigation nav-container',
-			children:
+			class: 'main-navigation nav-container',
+			nest:
 			[
 				{
-					className: 'logo-container',
+					class: 'logo-container',
 					link: this.addLogo()
 				},
 				{
-					className: 'nav-container',
+					class: 'nav-container',
 					nav: this.addPrimaryNav()
 				}
 			]
@@ -26,9 +26,9 @@ export class MainNavigation extends base.Component
 	{
 		return A(
 		{
-			className: 'logo',
+			class: 'logo',
 			href: './',
-			children:
+			nest:
 			[
 				{
 					tag: 'img',

@@ -1,18 +1,18 @@
-import { base } from '../../base/base.js';
+import { Component } from '../../base/base.js';
 import { Button, P } from '../atoms/atoms.js';
 
-export class ButtonGroup extends base.Component
+export class ButtonGroup extends Component
 {
 	render()
 	{
 		return {
-			className: 'button-group',
-			children:
+			class: 'button-group',
+			nest:
 			[
 				P({
 					onState: ['performance', (ele, state) =>
 					{
-						switch(state)
+						switch (state)
 						{
 							case 'fair':
 								return 'This is just Fair';
@@ -33,11 +33,11 @@ export class ButtonGroup extends base.Component
 	addButton(label, value)
 	{
 		return Button({
-			text: label,
 			click: () =>
 			{
 				this.state.set('performance', value)
-			}
+			},
+			label
 		});
 	}
 

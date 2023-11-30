@@ -7,22 +7,22 @@ export class CastPanel extends MainPanel
 	{
 		return MainSection(
 		{
-			className: 'cast-panel',
-			children:
+			class: 'cast-panel',
+			nest:
 			[
 				MainTitle({
 					text: 'Cast'
 				}),
 				{
 					tag: 'section',
-					className: 'body',
+					class: 'body',
 					row:
 					{
-						className: 'row',
-						children:
+						class: 'row',
+						nest:
 						[
-							{ className: 'col'},
-							{ className: 'col'}
+							{ class: 'col'},
+							{ class: 'col'}
 						]
 					}
 				}

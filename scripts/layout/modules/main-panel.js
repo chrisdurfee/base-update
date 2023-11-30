@@ -1,4 +1,4 @@
-import { base } from '../../base/base.js';
+import { Component } from '../../base/base.js';
 
 /**
  * MainPanel
@@ -7,7 +7,7 @@ import { base } from '../../base/base.js';
  * to all child components.
  * @class
  */
-export class MainPanel extends base.Component
+export class MainPanel extends Component
 {
 	/**
 	 * This will be called every time the route

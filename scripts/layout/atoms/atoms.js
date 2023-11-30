@@ -1,70 +1,64 @@
 import { Atom } from '../../base/base.js';
 
-export const Tag = Atom.extend((props) =>
+export const Tag = Atom((props, children) =>
 {
 	return {
-		className: props.className || null,
-		onState: props.onState || null,
-		onSet: props.onSet || null,
-		bind: props.bind || null,
-		watch: props.watch || null,
-		innerHTML: props.innerHTML || null,
-		text: props.text || null,
-		children: props.children
+		class: props.class,
+		nest: children,
 	};
 });
 
-export const Video = Tag.extend((props) =>
+export const Video = Atom((props) =>
 {
-	return {
+	return Tag({
 		tag: 'video',
-		innerHTML: '<source src="' + props.src + '"></source>',
+		html: '<source src="' + props.src + '"></source>',
 		autoplay: true,
 		muted: true,
 		loop: true
-	};
+	});
 });
 
-export const Button = Tag.extend((props) =>
+export const Button = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'button',
 		className: props.className || 'bttn',
 		click: props.click || null
-	};
+	});
 });
 
-export const MainSection = Tag.extend((props) =>
+export const MainSection = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'section',
 		className: 'main-panel ' + (props.className || ''),
-	};
+	});
 });
 
-export const Header = Tag.extend(
+export const Header = Atom((props, children) => Tag(
 {
 	tag: 'header'
-});
+}));
 
-export const H1 = Tag.extend(
+export const H1 = Atom((props, children) => Tag(
 {
 	tag: 'h1'
-});
+}));
 
-export const H2 = Tag.extend(
+export const H2 = Atom((props, children) => Tag(
 {
 	tag: 'h2'
-});
+}));
 
-export const Span = Tag.extend((props) =>
+export const Span = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'span'
-	};
+	});
 });
 
-export const Br = function()
+export const Br = () =>
 {
 	return {
 		tag: 'br'
@@ -83,32 +77,32 @@ export const MainTitle = (props) =>
 	});
 };
 
-export const P = Tag.extend(
+export const P = Atom((props, children) => Tag(
 {
 	tag: 'p'
-});
+}));
 
-export const A = Tag.extend((props) =>
+export const A = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'a',
 		href: props.href || null,
 		watch: props.watch || null
-	};
+	});
 });
 
-export const Label = Tag.extend((props) =>
+export const Label = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'label'
-	};
+	});
 });
 
-export const Input = Tag.extend((props) =>
+export const Input = Atom((props, children) =>
 {
-	return {
+	return Tag({
 		tag: 'input',
 		type: props.type || 'text',
 		placeholder: props.placeholder || null
-	};
+	});
 });

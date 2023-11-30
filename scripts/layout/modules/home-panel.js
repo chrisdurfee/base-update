@@ -1,5 +1,5 @@
-import { Data, Model } from '../../base/base.js';
-import { A, Button, H2, Input, Label, MainSection, MainTitle, P, Tag } from '../atoms/atoms.js';
+import { Atom, Data, Model } from '../../base/base.js';
+import { A, Button, H2, Input, Label, MainSection, MainTitle, P } from '../atoms/atoms.js';
 import { ButtonGroup } from '../controls/button-group.js';
 import { MainPanel } from './main-panel.js';
 
@@ -9,10 +9,11 @@ import { MainPanel } from './main-panel.js';
  * @param {object} props
  * @return {object}
  */
-const Row = Tag.extend((props) =>
+const Row = Atom((props, children) =>
 {
 	return {
-		className: 'row'
+		class: 'row',
+		nest: children
 	};
 });
 
@@ -74,7 +75,7 @@ export class HomePanel extends MainPanel
 	{
 		return MainSection(
 		{
-			className: 'home-panel',
+			class: 'home-panel',
 			onState: [
 				['loaded', {
 					loaded: true
@@ -85,9 +86,9 @@ export class HomePanel extends MainPanel
 					{
 						return P({
 							text: 'Not Loaded',
-							children: [
+							nest: [
 								Row({
-									children: [
+									nest: [
 										Button({
 											text: 'Change Loaded',
 											click: () =>
@@ -107,28 +108,28 @@ export class HomePanel extends MainPanel
 						}),
 						{
 							tag: 'section',
-							className: 'body',
+							class: 'body',
 							row: Row(
 							{
-								children:
+								nest:
 								[
-									{ className: 'col'},
+									{ class: 'col'},
 									{
-										className: 'col',
-										children: [
+										class: 'col',
+										nest: [
 											new ButtonGroup(),
 											{
-												className: 'container',
-												children: [
+												class: 'container',
+												nest: [
 													Row({
-														children: [
+														nest: [
 															H2({
 																watch: '[[firstName]] [[lastName]] is so cool.'
 															})
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															Label({
 																text: 'First Name'
 															}),
@@ -138,7 +139,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															Label({
 																text: 'Last Name'
 															}),
@@ -148,7 +149,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															A({
 																bind: ['href:firstName', 'https://google.com/[[value]]'],
 																watch: 'Search [[firstName]] [[lastName]]'
@@ -156,7 +157,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															P({
 																bind: ['lastName', (value) =>
 																{
@@ -166,7 +167,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															Button({
 																text: 'Change Name',
 																click: () =>
@@ -177,7 +178,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															Button({
 																text: 'Change Loaded',
 																click: () =>
@@ -188,7 +189,7 @@ export class HomePanel extends MainPanel
 														]
 													}),
 													Row({
-														children: [
+														nest: [
 															Button({
 																text: 'Call Service',
 																click: () =>

@@ -1,4 +1,4 @@
-import { base } from '../base/base.js';
+import { base, Builder } from '../base/base.js';
 import { AppShell } from './main/app-shell.js';
 
 /**
@@ -97,7 +97,7 @@ export class MainController
 			options: options,
 			routes: this.getRoutes()
 		});
-		main.setup(document.body);
+		Builder.render(main, document.body);
 	}
 
 	/**

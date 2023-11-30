@@ -12,8 +12,8 @@ export class SynopsisPanel extends MainPanel
 
 		return MainSection(
 		{
-			className: 'synopsis-panel',
-			children:
+			class: 'synopsis-panel',
+			nest:
 			[
 				MainTitle({
                     text: 'Synopsis',
@@ -23,15 +23,15 @@ export class SynopsisPanel extends MainPanel
                 }),
 				{
 					tag: 'section',
-					className: 'body',
+					class: 'body',
 					row:
 					{
-						className: 'row',
-						children:
+						class: 'row',
+						nest:
 						[
-							{ className: 'col'},
+							{ class: 'col'},
 							{
-                                className: 'col',
+                                class: 'col',
                                 tab: new Tab(
                                 {
                                     options: [

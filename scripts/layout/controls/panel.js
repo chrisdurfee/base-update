@@ -6,11 +6,9 @@ export class Panel extends base.Component
 	render()
 	{
 		return {
-            className: 'panel',
-            text: P({
-                text: this.text
-            }),
-            children: this.children
+            class: 'panel',
+            text: P(this.text),
+            nest: this.children
         };
 	}
 }

@@ -1,7 +1,7 @@
-import { base } from '../../base/base.js';
+import { Component } from '../../base/base.js';
 import { MainNavigation } from './main-navigation.js';
 
-export class AppControl extends base.Component
+export class AppControl extends Component
 {
     onCreated()
     {
@@ -11,7 +11,7 @@ export class AppControl extends base.Component
 	render()
 	{
 		return {
-			className: 'app-nav-container',
+			class: 'app-nav-container',
 			onState: ['ignoreHover', {
 				ignoreHover: true
             }],
