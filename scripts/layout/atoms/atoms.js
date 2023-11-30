@@ -25,7 +25,7 @@ export const Button = Atom((props, children) =>
 		tag: 'button',
 		className: props.className || 'bttn',
 		click: props.click || null
-	});
+	}, children);
 });
 
 export const MainSection = Atom((props, children) =>
@@ -33,29 +33,31 @@ export const MainSection = Atom((props, children) =>
 	return Tag({
 		tag: 'section',
 		className: 'main-panel ' + (props.className || ''),
-	});
+	}, children);
 });
 
 export const Header = Atom((props, children) => Tag(
 {
 	tag: 'header'
-}));
+}, children));
 
 export const H1 = Atom((props, children) => Tag(
 {
-	tag: 'h1'
-}));
+	tag: 'h1',
+}, children));
 
 export const H2 = Atom((props, children) => Tag(
 {
-	tag: 'h2'
-}));
+	tag: 'h2',
+	...props,
+}, children));
 
 export const Span = Atom((props, children) =>
 {
 	return Tag({
-		tag: 'span'
-	});
+		tag: 'span',
+		...props
+	}, children);
 });
 
 export const Br = () =>
@@ -68,7 +70,7 @@ export const Br = () =>
 export const MainTitle = (props) =>
 {
 	return Header({
-		children: [
+		nest: [
 			H1({
 				text: props.text,
 				watch: props.watch
@@ -80,7 +82,7 @@ export const MainTitle = (props) =>
 export const P = Atom((props, children) => Tag(
 {
 	tag: 'p'
-}));
+}, children));
 
 export const A = Atom((props, children) =>
 {
@@ -88,14 +90,14 @@ export const A = Atom((props, children) =>
 		tag: 'a',
 		href: props.href || null,
 		watch: props.watch || null
-	});
+	}, children);
 });
 
 export const Label = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'label'
-	});
+	}, children);
 });
 
 export const Input = Atom((props, children) =>
@@ -104,5 +106,5 @@ export const Input = Atom((props, children) =>
 		tag: 'input',
 		type: props.type || 'text',
 		placeholder: props.placeholder || null
-	});
+	}, children);
 });
