@@ -1,38 +1,27 @@
-import {base} from './core.js';
-import {ajax} from './modules/ajax/ajax.js';
-import {dataBinder} from './modules/data-binder/data-binder.js';
-import {Data, SimpleData, Model} from './modules/data/data.js';
-import {state} from './modules/state/state.js';
-import {router, NavLink} from './modules/router/router.js';
-import {builder} from './modules/layout/layout-builder.js';
-import {Component} from './modules/component/component.js';
-import {Atom} from './modules/atom/atom.js';
+import { base } from './main/base.js';
+import { Ajax } from './modules/ajax/ajax.js';
+import { Atom } from './modules/atom/atom.js';
+import { Component, Jot, Unit } from './modules/component/component.js';
+import { dataBinder } from './modules/data-binder/data-binder.js';
+import { Data, Model, SimpleData } from './modules/data/data.js';
+import { Builder } from './modules/layout/builder.js';
+import { NavLink, router } from './modules/router/router.js';
+import { StateTracker as State } from './modules/state/state-tracker.js';
 
 base.augment(
 {
-    ajax,
+    Ajax,
     dataBinder,
     Data,
     SimpleData,
     Model,
-    state,
-    builder,
+    State,
+    Builder,
     router,
     Component
 });
 
 export {
-    base,
-    ajax,
-    dataBinder,
-    Data,
-    SimpleData,
-    Model,
-    state,
-    builder,
-    router,
-    Component,
-    NavLink,
-    Atom
-}
+    Ajax, Atom, Builder, Component, Data, Jot, Model, NavLink, SimpleData, State, Unit, base, dataBinder, router
+};
 

@@ -1,5 +1,6 @@
-import {ComponentHelper} from './component-helper.js';
-import {SimpleData} from '../data/data.js';
+import { SimpleData } from '../data/data.js';
+import { Import } from '../import/import.js';
+import { ComponentHelper } from './component-helper.js';
 
 /**
  * This will setup a route uri pattern.
@@ -10,27 +11,33 @@ import {SimpleData} from '../data/data.js';
 const routePattern = (uri) =>
 {
 	let uriQuery = "";
-	if(uri)
+	if (uri)
 	{
-		/* we want to setup the wild card and param
-		checks to be modified to the route uri string */
-		let allowAll = /(\*)/g,
-		param = /(:[^\/?&($]+)/g,
-		optionalParams = /(\?\/+\*?)/g,
-		optionalSlash = /(\/):[^\/(]*?\?/g,
-		filter = /\//g;
-		uriQuery = uri.replace(filter, "\/").replace(allowAll, '.*');
+		const filter = /\//g;
+		uriQuery = uri.replace(filter, "\/");
 
 		/* this will setup for optional slashes before the optional params */
+		const optionalSlash = /(\/):[^\/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
 		{
-			let pattern = /\//g;
+			const pattern = /\//g;
 			return str.replace(pattern, '(?:$|\/)');
 		});
 
 		/* this will setup for optional params and params
 		and stop at the last slash or query start */
-		uriQuery = uriQuery.replace(optionalParams, '?\/*').replace(param, '([^\/|?]+)');
+		const param = /(:[^\/?&($]+)/g;
+		const optionalParams = /(\?\/+\*?)/g;
+		uriQuery = uriQuery.replace(optionalParams, '?\/*');
+		uriQuery = uriQuery.replace(param, (str) =>
+		{
+			return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
+		});
+
+		/* we want to setup the wild card and param
+		checks to be modified to the route uri string */
+		const allowAll = /(\*)/g;
+		uriQuery = uriQuery.replace(allowAll, '.*');
 	}
 
 	/* we want to set and string end if the wild card is not set */
@@ -46,16 +53,17 @@ const routePattern = (uri) =>
  */
 const getParamDefaults = (params) =>
 {
-	if(params.length)
+	if (!params.length)
 	{
-		let defaults = {};
-		for(var i = 0, length = params.length; i < length; i++)
-		{
-			defaults[params[i]] = null;
-		}
-		return defaults;
+		return null;
 	}
-	return null;
+
+	const defaults = {};
+	for (var i = 0, length = params.length; i < length; i++)
+	{
+		defaults[params[i]] = null;
+	}
+	return defaults;
 };
 
 /**
@@ -66,26 +74,26 @@ const getParamDefaults = (params) =>
  */
 const paramPattern = (uri) =>
 {
-	let params = [];
-	if(!uri)
+	const params = [];
+	if (!uri)
 	{
 		return params;
 	}
 
-	let filter = /[\*?]/g;
+	const filter = /[\*?]/g;
 	uri = uri.replace(filter, '');
 
-	let pattern = /:(.[^\/?&($]+)\?*/g,
+	const pattern = /:(.[^.\/?&($]+)\?*/g,
 	matches = uri.match(pattern);
-	if(matches === null)
+	if (matches === null)
 	{
 		return params;
 	}
 
-	for(var i = 0, maxLength = matches.length; i < maxLength; i++)
+	for (var i = 0, maxLength = matches.length; i < maxLength; i++)
 	{
 		var param = matches[i];
-		if(param)
+		if (param)
 		{
 			param = param.replace(':', '');
 			params.push(param);
@@ -111,10 +119,10 @@ export class Route extends SimpleData
 	 */
 	constructor(settings)
 	{
-		let uri = settings.baseUri;
+		const uri = settings.baseUri;
 
 		const paramKeys = paramPattern(uri);
-		let params = getParamDefaults(paramKeys);
+		const params = getParamDefaults(paramKeys);
 		super(params);
 
 		this.uri = uri;
@@ -153,31 +161,73 @@ export class Route extends SimpleData
 	}
 
 	/**
+	 * This will update the route title.
+	 *
+	 * @param {string|function} title
+	 */
+	setTitle(title)
+	{
+		base.router.updateTitle({
+			title: title,
+			stage: this.stage
+		});
+	}
+
+	/**
 	 * This will deactivate the route.
 	 */
 	deactivate()
 	{
 		this.set('active', false);
 
-		let controller = this.controller;
-		if(controller)
+		const controller = this.controller;
+		if (controller)
 		{
 			controller.remove();
 		}
 	}
 
 	/**
-	 * This will setup the route component.
+	 * This will get the route layout.
+	 *
+	 * @param {object} settings
+	 * @returns {object|null}
+	 */
+	getLayout(settings)
+	{
+		if (settings.component)
+		{
+			return settings.component;
+		}
+
+		let imported = settings.import;
+		if (!imported)
+		{
+			return null;
+		}
+
+		if (typeof imported === 'string')
+		{
+			imported = {
+				src: imported
+			};
+		}
+
+		return Import(imported);
+	}
+
+	/**
+	 * This will setup the route layout.
 	 *
 	 * @protected
 	 * @param {object} settings
 	 */
 	setupComponentHelper(settings)
 	{
-		if(settings.component)
+		const component = this.getLayout(settings);
+		if (component)
 		{
-			let {component, container, persist = false, parent} = settings;
-
+			const {container, persist = false, parent} = settings;
 			const helperSettings =
 			{
 				component,
@@ -186,6 +236,20 @@ export class Route extends SimpleData
 				parent
 			};
 			this.controller = new ComponentHelper(this, helperSettings);
+		}
+	}
+
+	/**
+	 * This will resume the route.
+	 *
+	 * @param {object} container
+	 */
+	resume(container)
+	{
+		const controller = this.controller;
+		if (controller)
+		{
+			controller.container = container;
 		}
 	}
 
@@ -208,18 +272,54 @@ export class Route extends SimpleData
 	{
 		this.set('active', true);
 
-		let params = this.stage,
+		const params = this.stage,
 		callBack = this.callBack;
-		if(typeof callBack === 'function')
+		if (typeof callBack === 'function')
 		{
 			callBack(params);
 		}
 
-		let controller = this.controller;
-		if(controller)
+		const controller = this.controller;
+		if (controller)
 		{
 			controller.focus(params);
 		}
+
+		const path = this.path;
+		if (!path)
+		{
+			return;
+		}
+
+		const hash = path.split('#')[1];
+		if (!hash)
+		{
+			return;
+		}
+
+		this.scrollToId(hash);
+	}
+
+	/**
+	 * This will scroll to the element by id.
+	 *
+	 * @param {string} hash
+	 * @returns void
+	 */
+	scrollToId(hash)
+	{
+		if (!hash)
+		{
+			return;
+		}
+
+		const ele = document.getElementById(hash);
+		if (!ele)
+		{
+			return;
+		}
+
+		ele.scrollIntoView(true);
 	}
 
 	/**
@@ -234,14 +334,14 @@ export class Route extends SimpleData
 
 		/* we want to check to use the supplied uri or get the
 		current uri if not setup */
-		let result = path.match(this.uriQuery);
-		if(result === null)
+		const result = path.match(this.uriQuery);
+		if (result === null)
 		{
 			this.resetParams();
 			return matched;
 		}
 
-		if(result && typeof result === 'object')
+		if (result && typeof result === 'object')
 		{
 			/* this will remove the first match from the
 			the params */
@@ -270,23 +370,27 @@ export class Route extends SimpleData
 	 */
 	setParams(values)
 	{
-		if(values && typeof values === 'object')
+		if (!values || typeof values !== 'object')
 		{
-			let keys = this.paramKeys;
-			if(keys)
+			return;
+		}
+
+		const keys = this.paramKeys;
+		if (!keys)
+		{
+			return;
+		}
+
+		const params = {};
+		for (var i = 0, maxL = keys.length; i < maxL; i++)
+		{
+			var key = keys[i];
+			if (typeof key !== 'undefined')
 			{
-				let params = {};
-				for(var i = 0, maxL = keys.length; i < maxL; i++)
-				{
-					var key = keys[i];
-					if(typeof key !== 'undefined')
-					{
-						params[key] = values[i];
-					}
-				}
-				this.set(params);
+				params[key] = values[i];
 			}
 		}
+		this.set(params);
 	}
 
 	/**

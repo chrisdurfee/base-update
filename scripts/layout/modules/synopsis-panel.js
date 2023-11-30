@@ -1,8 +1,8 @@
-import {MainPanel} from './main-panel.js';
-import {MainTitle, MainSection} from '../atoms/atoms.js';
-import {Tab} from '../controls/tab.js';
-import {Panel} from '../controls/panel.js';
-import {ButtonGroup} from '../controls/button-group.js';
+import { MainSection, MainTitle } from '../atoms/atoms.js';
+import { ButtonGroup } from '../controls/button-group.js';
+import { Panel } from '../controls/panel.js';
+import { Tab } from '../controls/tab.js';
+import { MainPanel } from './main-panel.js';
 
 export class SynopsisPanel extends MainPanel
 {

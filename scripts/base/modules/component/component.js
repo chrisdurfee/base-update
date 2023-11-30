@@ -1,46 +1,24 @@
-import {base} from '../../core.js';
-import {builder} from '../layout/layout-builder.js';
-import {state} from '../state/state.js';
-import {dataBinder} from '../data-binder/data-binder.js';
-import {EventHelper} from './event-helper.js';
-import {StateHelper} from './state-helper.js';
+import { Objects } from '../../shared/objects.js';
+import { StateTracker } from '../state/state-tracker.js';
+import { EventHelper } from './event-helper.js';
+import { StateHelper } from './state-helper.js';
+import { Unit } from './unit.js';
 
-/* this will register the component system to the
-data tracker to remove components that have been
-nested in layouts. */
-base.dataTracker.addType('components', (data) =>
-{
-	if(!data)
-	{
-		return;
-	}
-
-	let component = data.component;
-	if(component && component.rendered === true)
-	{
-		component.prepareDestroy();
-	}
-});
-
-let componentNumber = 0;
+export { Jot } from './jot.js';
+export { Unit } from './unit.js';
 
 /**
  * Component
  *
  * @class
+ * @augments Unit
  *
  * This will allow components to be extended
  * from a single factory.
  *
  * @example
- * class QuickFlashPanel extends base.Component
+ * class QuickFlashPanel extends Component
  *	{
- *		constructor(props)
- *		{
- *			// this will setup the component id
- *			super(props);
- *		},
- *
  *		render()
  *		{
  *			return {
@@ -49,14 +27,18 @@ let componentNumber = 0;
  *		}
  *	}
  */
-export class Component
+export class Component extends Unit
 {
 	/**
+	 * This will create a component.
+	 *
 	 * @constructor
 	 * @param {object} [props]
 	 */
 	constructor(props)
 	{
+		super(props);
+
 		/**
 		 * @param {bool} isComponent
 		 */
@@ -68,260 +50,22 @@ export class Component
 		 * @member {string} [stateTargetId] // optional override of state id
 		 */
 		this.stateTargetId = null;
-
-		this.init();
-		this.setupProps(props);
-		this.onCreated();
-
-		this.rendered = false;
-		this.container = null;
-	}
-
-	/**
-	 * This will setup the component number and unique
-	 * instance id for the component elements.
-	 * @protected
-	 */
-	init()
-	{
-		this.id = 'cp-' + (componentNumber++);
-	}
-
-	/**
-	 * This will setup the component props.
-	 *
-	 * @param {object} [props]
-	 */
-	setupProps(props)
-	{
-		if(!props || typeof props !== 'object')
-		{
-			return false;
-		}
-
-		for(var prop in props)
-		{
-			if(props.hasOwnProperty(prop))
-			{
-				this[prop] = props[prop];
-			}
-		}
-	}
-
-	/**
-	 * override this to do something when created.
-	 */
-	onCreated()
-	{
-
-	}
-
-	/**
-	 * This will render the component.
-	 *
-	 * @return {object}
-	 */
-	render()
-	{
-		return {
-
-		};
-	}
-
-	/**
-	 * This will cache the layout panel and set the main id.
-	 * @param {object} layout
-	 * @return {object}
-	 */
-	_cacheRoot(layout)
-	{
-		if(!layout)
-		{
-			return layout;
-		}
-
-		if(!layout.id)
-		{
-			layout.id = this.getId();
-		}
-
-		layout.cache = 'panel';
-		return layout;
-	}
-
-	/**
-	 * This will create the component layout.
-	 * @protected
-	 * @return {object}
-	 */
-	_createLayout()
-	{
-		if(this.persist)
-		{
-			return this._layout || (this._layout = this.render());
-		}
-
-		return this.render();
-	}
-
-	/**
-	 * This will prepare the layout.
-	 *
-	 * @protected
-	 * @return {object}
-	 */
-	prepareLayout()
-	{
-		let layout = this._createLayout();
-		return this._cacheRoot(layout);
-	}
-
-	/**
-	 * This will build the layout.
-	 * @protected
-	 */
-	buildLayout()
-	{
-		let layout = this.prepareLayout();
-		this.build(layout, this.container);
-
-		base.dataTracker.add(this.panel, 'components',
-		{
-			component: this
-		});
-
-		this.rendered = true;
-	}
-
-	/**
-	 * This will build a layout.
-	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	build(layout, container)
-	{
-		return builder.build(layout, container, this);
-	}
-
-	/**
-	 * This will rebuild a layout.
-	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	rebuild(layout, container)
-	{
-		return builder.rebuild(container, layout, this);
-	}
-
-	/**
-	 * This will remove children from an element.
-	 *
-	 * @param {object} layout
-	 * @param {object} container
-	 * @return {object}
-	 */
-	removeAll(ele)
-	{
-		return builder.removeAll(ele);
-	}
-
-	/**
-	 * This will cache an element when its created by
-	 * saving a reference to it as a property on the
-	 * component.
-	 *
-	 * @param {string} propName The name to use as
-	 * the reference.
-	 * @param {object} layout
-	 * @param {function} [callBack]
-	 * @return {object}
-	 */
-	cache(propName, layout, callBack)
-	{
-		if(!layout || typeof layout !== 'object')
-		{
-			return false;
-		}
-
-		if(layout.isComponent === true)
-		{
-			layout =
-			{
-				component: layout
-			};
-		}
-
-		layout.onCreated = (element) =>
-		{
-			this[propName] = element;
-
-			if(typeof callBack === 'function')
-			{
-				callBack(element);
-			}
-		};
-		return layout;
-	}
-
-	/**
-	 * This will get an id of the component or the full
-	 * id that has the component id prepended to the
-	 * requested id.
-	 *
-	 * @param {string} [id]
-	 * @return {string}
-	 */
-	getId(id)
-	{
-		let mainId = this.id;
-		if(typeof id === 'string')
-		{
-			mainId += '-' + id;
-		}
-		return mainId;
 	}
 
 	/**
 	 * This will initialize the component.
+	 *
 	 * @protected
+	 * @return {object}
 	 */
 	initialize()
 	{
-		this.beforeSetup();
+		this.setupContext();
 		this.addStates();
+		this.beforeSetup();
 		this.buildLayout();
 		this.addEvents();
 		this.afterSetup();
-	}
-
-	/**
-	 * override this to do something before setup.
-	 */
-	beforeSetup()
-	{
-
-	}
-
-	/**
-	 * override this to do something after setup.
-	 */
-	afterSetup()
-	{
-
-	}
-
-	/**
-	 * This will setup and render the component.
-	 * @param {object} container
-	 */
-	setup(container)
-	{
-		this.container = container;
-		this.initialize();
 	}
 
 	/**
@@ -332,12 +76,14 @@ export class Component
 	 */
 	setupStateTarget(id)
 	{
-		let targetId = id || this.stateTargetId || this.id;
-		this.state = state.getTarget(targetId);
+		const targetId = id || this.stateTargetId || this.id;
+		this.state = StateTracker.getTarget(targetId);
 	}
 
 	/**
 	 * Override this to setup the component states.
+	 *
+	 * @protected
 	 * @return {object}
 	 */
 	setupStates()
@@ -367,14 +113,16 @@ export class Component
 
 	/**
 	 * This will add the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addStates()
 	{
 		/* this will check to restore previous a previous state if the
 		component has been preserved. */
-		let state = this.state;
-		if(state)
+		const state = this.state;
+		if (state)
 		{
 			this.stateHelper.restore(state);
 			return;
@@ -382,8 +130,8 @@ export class Component
 
 		/* this will only setupa state manager if
 		we have states */
-		let states = this.setupStates();
-		if(base.isEmpty(states))
+		const states = this.setupStates();
+		if (Objects.isEmpty(states))
 		{
 			return;
 		}
@@ -394,28 +142,31 @@ export class Component
 
 	/**
 	 * This will remove the states.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeStates()
 	{
-		let state = this.state;
-		if(!state)
+		const state = this.state;
+		if (!state)
 		{
 			return false;
 		}
 
 		this.stateHelper.removeRemoteStates();
-		state.remove();
+		StateTracker.remove();
 	}
 
 	/**
 	 * This will setup the event helper.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	setupEventHelper()
 	{
-		if(!this.events)
+		if (!this.events)
 		{
 			this.events = new EventHelper();
 		}
@@ -438,11 +189,12 @@ export class Component
 	 * This will add the events.
 	 *
 	 * @protected
+	 * @return {void}
 	 */
 	addEvents()
 	{
-		let events = this.setupEvents();
-		if(events.length < 1)
+		const events = this.setupEvents();
+		if (events.length < 1)
 		{
 			return false;
 		}
@@ -453,31 +205,24 @@ export class Component
 
 	/**
 	 * This will remove the events.
+	 *
 	 * @protected
+	 * @return {void}
 	 */
 	removeEvents()
 	{
-		let events = this.events;
-		if(events)
+		const events = this.events;
+		if (events)
 		{
 			events.reset();
 		}
 	}
 
 	/**
-	 * This will remove the component.
-	 * @protected
-	 */
-	remove()
-	{
-		this.prepareDestroy();
-
-		let panel = this.panel || this.id;
-		builder.removeElement(panel);
-	}
-
-	/**
 	 * This will prepare the component to be destroyed.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	prepareDestroy()
 	{
@@ -485,37 +230,11 @@ export class Component
 		this.beforeDestroy();
 		this.removeEvents();
 		this.removeStates();
-	}
+		this.removeContext();
 
-	/**
-	 * Override this to do something before destroy.
-	 */
-	beforeDestroy()
-	{
-
-	}
-
-	/**
-	 * This will destroy the component.
-	 */
-	destroy()
-	{
-		this.remove();
-	}
-
-	/**
-	 * This will bind and element to data.
-	 *
-	 * @param {object} element
-	 * @param {object} data
-	 * @param {string} prop
-	 * @param {function} filter
-	 */
-	bindElement(element, data, prop, filter)
-	{
-		if(element)
+		if (this.data && this.persist === false)
 		{
-			dataBinder.bind(element, data, prop, filter);
+			this.data.unlink();
 		}
 	}
 }

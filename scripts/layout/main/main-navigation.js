@@ -1,6 +1,6 @@
-import {base} from '../../base/core.js';
-import {DeepNavigation} from '../controls/navigation.js';
-import {A} from '../atoms/atoms.js';
+import { base } from '../../base/base.js';
+import { A } from '../atoms/atoms.js';
+import { DeepNavigation } from '../controls/navigation.js';
 
 export class MainNavigation extends base.Component
 {

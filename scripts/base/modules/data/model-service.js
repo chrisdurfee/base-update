@@ -1,15 +1,19 @@
-import {ajax} from '../ajax/ajax.js';
-import {base} from '../../core.js';
+import { Encode } from '../../shared/encode/encode.js';
+import { Strings } from '../../shared/strings.js';
+import { Ajax } from '../ajax/ajax.js';
 
 /**
  * ModelService
  *
  * This will create a new model service.
+ *
  * @class
  */
 export class ModelService
 {
 	/**
+	 * This will create a model service.
+	 *
 	 * @constructor
 	 * @param {object} model
 	 */
@@ -23,17 +27,30 @@ export class ModelService
 		/**
 		 * @member {string} objectType The return type.
 		 */
-		this.objectType = 'item';
+		this.objectType = this.objectType || 'item';
 
+		/**
+		 * @member {string} url
+		 */
 		this.url = '';
+
+		/**
+		 * @member {function} validateCallBack
+		 */
 		this.validateCallBack = null;
 		this.init();
 	}
 
+	/**
+	 * This will initialize the model service.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
 	init()
 	{
-		let model = this.model;
-		if(model && model.url)
+		const model = this.model;
+		if (model && model.url)
 		{
 			this.url = model.url;
 		}
@@ -46,11 +63,11 @@ export class ModelService
 	 */
 	isValid()
 	{
-		let result = this.validate();
-		if(result !== false)
+		const result = this.validate();
+		if (result !== false)
 		{
-			let callBack = this.validateCallBack;
-			if(typeof callBack === 'function')
+			const callBack = this.validateCallBack;
+			if (typeof callBack === 'function')
 			{
 				callBack(result);
 			}
@@ -90,9 +107,29 @@ export class ModelService
 	 */
 	setupParams(params)
 	{
-		let defaults = this.getDefaultParams();
+		const defaults = this.getDefaultParams();
 		params = this.addParams(params, defaults);
 		return params;
+	}
+
+	/**
+	 * This will convert an object to a string.
+	 *
+	 * @protected
+	 * @param {object} object
+	 * @return {string}
+	 */
+	objectToString(object)
+	{
+		const params = [];
+		for (var prop in object)
+		{
+			if (object.hasOwnProperty(prop))
+			{
+				params.push(prop + '=' + object[prop]);
+			}
+		}
+		return params.join('&');
 	}
 
 	/**
@@ -106,26 +143,26 @@ export class ModelService
 	addParams(params, addingParams)
 	{
 		params = params || {};
-		if(typeof params === 'string')
+		if (typeof params === 'string')
 		{
-			params = base.parseQueryString(params);
+			params = Strings.parseQueryString(params, false);
 		}
 
-		if(!addingParams)
+		if (!addingParams)
 		{
-			return params;
+			return (!this._isFormData(params))? this.objectToString(params) : params;
 		}
 
-		if(typeof addingParams === 'string')
+		if (typeof addingParams === 'string')
 		{
-			addingParams = base.parseQueryString(addingParams);
+			addingParams = Strings.parseQueryString(addingParams, false);
 		}
 
-		if(this._isFormData(params))
+		if (this._isFormData(params))
 		{
-			for(var key in addingParams)
+			for (var key in addingParams)
 			{
-				if(addingParams.hasOwnProperty(key))
+				if (addingParams.hasOwnProperty(key))
 				{
 					params.append(key, addingParams[key]);
 				}
@@ -134,6 +171,7 @@ export class ModelService
 		else
 		{
 			params = Object.assign(params, addingParams);
+			params = this.objectToString(params);
 		}
 
 		return params;
@@ -148,19 +186,19 @@ export class ModelService
 	 */
 	get(instanceParams, callBack)
 	{
-		let id = this.model.get('id'),
+		const id = this.model.get('id'),
 		params = 'op=get' +
-						'&id=' + id;
+			'&id=' + id;
 
-		let model = this.model;
-		return this.request(params, instanceParams, callBack, (response) =>
+		const model = this.model;
+		return this._get('', params, instanceParams, callBack, (response) =>
 		{
-			if(response)
+			if (response)
 			{
 				/* this will update the model with the get request
 				response */
-				let object = this.getObject(response);
-				if(object)
+				const object = this.getObject(response);
+				if (object)
 				{
 					model.set(object);
 				}
@@ -179,7 +217,7 @@ export class ModelService
 	{
 		/* this will update the model with the get request
 		response */
-		let object = response[this.objectType] || response;
+		const object = response[this.objectType] || response;
 		return object || false;
 	}
 
@@ -191,8 +229,8 @@ export class ModelService
 	 */
 	setupObjectData()
 	{
-		let item = this.model.get();
-		return this.objectType + '=' + base.prepareJsonUrl(item);
+		const item = this.model.get();
+		return this.objectType + '=' + Encode.prepareJsonUrl(item);
 	}
 
 	/**
@@ -204,19 +242,15 @@ export class ModelService
 	 */
 	setup(instanceParams, callBack)
 	{
-		if(!this.isValid())
+		if (!this.isValid())
 		{
 			return false;
 		}
 
 		let params = 'op=setup' +
-						'&' + this.setupObjectData();
+			'&' + this.setupObjectData();
 
-		/* this will add the instance params with the
-		method params */
-		params = this.addParams(params, instanceParams, instanceParams);
-
-		return this.request(params, callBack);
+		return this._put('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -228,15 +262,15 @@ export class ModelService
 	 */
 	add(instanceParams, callBack)
 	{
-		if(!this.isValid())
+		if (!this.isValid())
 		{
 			return false;
 		}
 
 		let params = 'op=add' +
-						'&' + this.setupObjectData();
+			'&' + this.setupObjectData();
 
-		return this.request(params, instanceParams, callBack);
+		return this._post('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -248,15 +282,15 @@ export class ModelService
 	 */
 	update(instanceParams, callBack)
 	{
-		if(!this.isValid())
+		if (!this.isValid())
 		{
 			return false;
 		}
 
 		let params = 'op=update' +
-						'&' + this.setupObjectData();
+			'&' + this.setupObjectData();
 
-		return this.request(params, instanceParams, callBack);
+		return this._patch('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -268,11 +302,11 @@ export class ModelService
 	 */
 	delete(instanceParams, callBack)
 	{
-		let id = this.model.get('id'),
+		const id = this.model.get('id'),
 		params = 'op=delete' +
-						'&id=' + id;
+			'&id=' + id;
 
-		return this.request(params, instanceParams, callBack);
+		return this._delete('', params, instanceParams, callBack);
 	}
 
 	/**
@@ -292,31 +326,57 @@ export class ModelService
 		count = !isNaN(count)? count : 50;
 
 		let params = 'op=all' +
-						'&option=' + filter +
-						'&start=' + start +
-						'&stop=' + count;
+			'&option=' + filter +
+			'&start=' + start +
+			'&stop=' + count;
 
-		return this.request(params, instanceParams, callBack);
+		return this._get('', params, instanceParams, callBack);
+	}
+
+	/**
+	 * This will get the url.
+	 *
+	 * @protected
+	 * @param {string} url
+	 * @return {string}
+	 */
+	getUrl(url)
+	{
+		let baseUrl = this.url;
+		if (!url)
+		{
+			return baseUrl;
+		}
+
+		if (url[0] === '?')
+		{
+			return baseUrl + url;
+		}
+
+		return baseUrl += '/' + url;
 	}
 
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	setupRequest(method, params, callBack, requestCallBack)
+	setupRequest(url, method, params, callBack, requestCallBack)
 	{
-		let settings = {
-			url: this.url,
+		const settings = {
+			url: this.getUrl(url),
 			method,
 			params,
 			completed: (response, xhr) =>
 			{
-				if(typeof requestCallBack === 'function')
+				if (typeof requestCallBack === 'function')
 				{
 					requestCallBack(response);
 				}
@@ -325,15 +385,22 @@ export class ModelService
 			}
 		};
 
-		let overrideHeader = this._isFormData(params);
-		if(overrideHeader)
+		const overrideHeader = this._isFormData(params);
+		if (overrideHeader)
 		{
 			settings.headers = {};
 		}
 
-		return ajax(settings);
+		return Ajax(settings);
 	}
 
+	/**
+	 * This will check if the data is a form data object.
+	 *
+	 * @protected
+	 * @param {*} data
+	 * @return {boolean}
+	 */
 	_isFormData(data)
 	{
 		return data instanceof FormData;
@@ -342,109 +409,168 @@ export class ModelService
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
 	request(params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('POST', params, instanceParams, callBack, requestCallBack);
+		return this._request('', 'POST', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a GET request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	_get(params, instanceParams, callBack, requestCallBack)
+	_get(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('GET', params, instanceParams, callBack, requestCallBack);
+		params = this.setupParams(params);
+		params = this.addParams(params, instanceParams);
+
+		url = url || '';
+
+		if (params)
+		{
+			url += '?' + params;
+		}
+
+		return this.setupRequest(url, "GET", '', callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a POST request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	_post(params, instanceParams, callBack, requestCallBack)
+	_post(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('POST', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'POST', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a PUT request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	_put(params, instanceParams, callBack, requestCallBack)
+	_put(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('PUT', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'PUT', params, instanceParams, callBack, requestCallBack);
+	}
+
+	/**
+	 * This will make a PATCH request.
+	 *
+	 * @protected
+	 * @param {string} url
+	 * @param {(string|object)} params
+	 * @param {string} instanceParams
+	 * @param {function} callBack
+	 * @param {function} [requestCallBack]
+	 * @param {object}
+	 * @return {object}
+	 */
+	_patch(url, params, instanceParams, callBack, requestCallBack)
+	{
+		return this._request(url, 'PATCH', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make a DELETE request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	_delete(params, instanceParams, callBack, requestCallBack)
+	_delete(url, params, instanceParams, callBack, requestCallBack)
 	{
-		return this._request('DELETE', params, instanceParams, callBack, requestCallBack);
+		return this._request(url, 'DELETE', params, instanceParams, callBack, requestCallBack);
 	}
 
 	/**
 	 * This will make an ajax request.
 	 *
+	 * @protected
+	 * @param {string} url
 	 * @param {string} method
 	 * @param {(string|object)} params
 	 * @param {string} instanceParams
 	 * @param {function} callBack
 	 * @param {function} [requestCallBack]
 	 * @param {object}
+	 * @return {object}
 	 */
-	_request(method, params, instanceParams, callBack, requestCallBack)
+	_request(url, method, params, instanceParams, callBack, requestCallBack)
 	{
 		params = this.setupParams(params);
 		params = this.addParams(params, instanceParams);
 
-		return this.setupRequest(method, params, callBack, requestCallBack);
+		return this.setupRequest(url, method, params, callBack, requestCallBack);
 	}
 
+	/**
+	 * This will get the response.
+	 *
+	 * @protected
+	 * @param {object} response
+	 * @param {function} callBack
+	 * @param {object} xhr
+	 * @return {void}
+	 */
 	getResponse(response, callBack, xhr)
 	{
 		/* this will check to return the response
 		to the callBack function */
-		if(typeof callBack === 'function')
+		if (typeof callBack === 'function')
 		{
 			callBack(response, xhr);
 		}
 	}
 
+	/**
+	 * This will extend the model service.
+	 *
+	 * @param {object} child
+	 * @return {object}
+	 */
 	static extend(child)
 	{
-		if(!child)
+		if (!child)
 		{
 			return false;
 		}
 
-		var parent = this;
+		const parent = this;
 		class service extends parent
 		{
 			constructor(model)
@@ -454,7 +580,6 @@ export class ModelService
 		}
 
 		Object.assign(service.prototype, child);
-
 		return service;
 	}
 }

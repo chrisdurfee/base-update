@@ -1,22 +1,42 @@
-import {state} from '../state/state.js';
+import { StateTracker } from '../state/state-tracker.js';
 
 /**
  * StateHelper
  *
  * This is a helper to manage component states.
+ *
+ * @class
  */
 export class StateHelper
 {
 	/**
+	 * This will create a state helper.
+	 *
 	 * @constructor
 	 * @param {object} state
 	 * @param {object} states
 	 */
 	constructor(state, states)
 	{
+		/**
+		 * @member {array} remoteStates
+		 */
 		this.remoteStates = [];
 
-		let actions = this.convertStates(states);
+		const actions = this.convertStates(states);
+		this.addStatesToTarget(state, actions);
+	}
+
+	/**
+	 * This will add states to a state.
+	 *
+	 * @param {object} state
+	 * @param {object} states
+	 * @return {void}
+	 */
+	addStates(state, states)
+	{
+		const actions = this.convertStates(states);
 		this.addStatesToTarget(state, actions);
 	}
 
@@ -49,14 +69,15 @@ export class StateHelper
 	 */
 	convertStates(action)
 	{
-		let actions = [];
-		for(var prop in action)
+		const actions = [];
+		for (var prop in action)
 		{
-			if(action.hasOwnProperty(prop) === false)
+			if (action.hasOwnProperty(prop) === false)
 			{
 				continue;
 			}
-			else if(prop === 'remotes')
+
+			if (prop === 'remotes')
 			{
 				this.setupRemoteStates(action[prop], actions);
 				continue;
@@ -65,7 +86,7 @@ export class StateHelper
 			var targetId = null,
 			callBack = null,
 			state = action[prop];
-			if(state && typeof state === 'object')
+			if (state && typeof state === 'object')
 			{
 				callBack = state.callBack;
 				targetId = state.id || state.targetId;
@@ -82,20 +103,28 @@ export class StateHelper
 		return actions;
 	}
 
+	/**
+	 * This will setup remote states.
+	 *
+	 * @protected
+	 * @param {array} remotes
+	 * @param {array} actions
+	 * @return {void}
+	 */
 	setupRemoteStates(remotes, actions)
 	{
 		let remote;
-		for(var i = 0, length = remotes.length; i < length; i++)
+		for (var i = 0, length = remotes.length; i < length; i++)
 		{
 			remote = remotes[i];
-			if(!remote)
+			if (!remote)
 			{
 				continue;
 			}
 
-			for(var prop in remote)
+			for (var prop in remote)
 			{
-				if(remote.hasOwnProperty(prop) === false || prop === 'id')
+				if (remote.hasOwnProperty(prop) === false || prop === 'id')
 				{
 					continue;
 				}
@@ -103,7 +132,7 @@ export class StateHelper
 				var callBack = null,
 				value = remote[prop],
 				state = (value !== null)? value : undefined;
-				if(state && typeof state === 'object')
+				if (state && typeof state === 'object')
 				{
 					callBack = state.callBack;
 					state = state.state;
@@ -121,11 +150,13 @@ export class StateHelper
 
 	/**
 	 * This will remove remote states.
+	 *
+	 * @return {void}
 	 */
 	removeRemoteStates()
 	{
-		let remoteStates = this.remoteStates;
-		if(remoteStates)
+		const remoteStates = this.remoteStates;
+		if (remoteStates)
 		{
 			this.removeActions(remoteStates);
 		}
@@ -135,18 +166,19 @@ export class StateHelper
 	 * This will remove the actions.
 	 *
 	 * @param {array} actions
+	 * @return {void}
 	 */
 	removeActions(actions)
 	{
-		if(actions.length < 1)
+		if (actions.length < 1)
 		{
 			return;
 		}
 
-		for(var i = 0, length = actions.length; i < length; i++)
+		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i];
-			state.remove(action.targetId, action.action, action.token);
+			StateTracker.remove(action.targetId, action.action, action.token);
 		}
 	}
 
@@ -154,18 +186,19 @@ export class StateHelper
 	 * This will restore a state.
 	 *
 	 * @param {object} state
+	 * @return {void}
 	 */
 	restore(state)
 	{
-		state.restore();
+		StateTracker.restore();
 
-		let remotes = this.remoteStates;
-		if(!remotes)
+		const remotes = this.remoteStates;
+		if (!remotes)
 		{
 			return;
 		}
 
-		for(var i = 0, length = remotes.length; i < length; i++)
+		for (var i = 0, length = remotes.length; i < length; i++)
 		{
 			var action = remotes[i];
 			action.token = this.bindRemoteState(state, action.action, action.targetId);
@@ -182,35 +215,8 @@ export class StateHelper
 	 */
 	bindRemoteState(target, actionEvent, remoteTargetId)
 	{
-		let token,
-		remoteTarget = state.getTarget(remoteTargetId),
-		value = remoteTarget.get(actionEvent);
-		if(typeof value !== 'undefined')
-		{
-			target.set(actionEvent, value);
-		}
-
-		token = remoteTarget.on(actionEvent, (state, prevState, committer) =>
-		{
-			if(committer === target)
-			{
-				return false;
-			}
-
-			target.set(actionEvent, state, remoteTarget);
-		});
-
-		target.on(actionEvent, (state, prevState, committer) =>
-		{
-			if(committer === remoteTarget)
-			{
-				return false;
-			}
-
-			remoteTarget.set(actionEvent, state, target);
-		});
-
-		return token;
+		const remoteTarget = StateTracker.getTarget(remoteTargetId);
+		return target.link(remoteTarget, actionEvent);
 	}
 
 	/**
@@ -219,24 +225,25 @@ export class StateHelper
 	 * @protected
 	 * @param {object} state
 	 * @param {array} actions
+	 * @return {void}
 	 */
 	addStatesToTarget(state, actions)
 	{
-		let remotes = this.remoteStates;
+		const remotes = this.remoteStates;
 
-		for(var i = 0, length = actions.length; i < length; i++)
+		for (var i = 0, length = actions.length; i < length; i++)
 		{
 			var action = actions[i],
 			token = this.addAction(state, action);
 
-			if(action.targetId)
+			if (action.targetId)
 			{
 				action.token = token;
 				remotes.push(action);
 			}
 		}
 
-		if(remotes.length < 1)
+		if (remotes.length < 1)
 		{
 			this.remoteStates = null;
 		}
@@ -247,6 +254,7 @@ export class StateHelper
 	 *
 	 * @param {object} target
 	 * @param {object} action
+	 * @return {string}
 	 */
 	addAction(target, action)
 	{
@@ -254,19 +262,19 @@ export class StateHelper
 		actionEvent = action.action;
 
 		/* this will check to select the remote target if set */
-		let targetId = action.targetId;
-		if(targetId)
+		const targetId = action.targetId;
+		if (targetId)
 		{
 			token = this.bindRemoteState(target, actionEvent, targetId);
 		}
 
-		if(typeof action.state !== 'undefined')
+		if (typeof action.state !== 'undefined')
 		{
 			target.addAction(actionEvent, action.state);
 		}
 
-		let callBack = action.callBack;
-		if(typeof callBack === 'function')
+		const callBack = action.callBack;
+		if (typeof callBack === 'function')
 		{
 			target.on(actionEvent, callBack);
 		}

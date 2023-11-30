@@ -1,4 +1,4 @@
-import {base} from '../../base/base.js';
+import { base } from '../../base/base.js';
 
 /**
  * TabLink

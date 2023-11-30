@@ -1,7 +1,7 @@
-import {Data, Model} from '../../base/base.js';
-import {MainPanel} from './main-panel.js';
-import {Tag, MainTitle, MainSection, Button, H2, Label, Input, A, P} from '../atoms/atoms.js';
-import {ButtonGroup} from '../controls/button-group.js';
+import { Data, Model } from '../../base/base.js';
+import { A, Button, H2, Input, Label, MainSection, MainTitle, P, Tag } from '../atoms/atoms.js';
+import { ButtonGroup } from '../controls/button-group.js';
+import { MainPanel } from './main-panel.js';
 
 /**
  * This will create a row.

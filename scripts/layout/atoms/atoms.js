@@ -1,4 +1,4 @@
-import {Atom} from '../../base/base.js';
+import { Atom } from '../../base/base.js';
 
 export const Tag = Atom.extend((props) =>
 {

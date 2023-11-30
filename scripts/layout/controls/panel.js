@@ -1,5 +1,5 @@
-import {base} from '../../base/base.js';
-import {P} from '../atoms/atoms.js';
+import { base } from '../../base/base.js';
+import { P } from '../atoms/atoms.js';
 
 export class Panel extends base.Component
 {

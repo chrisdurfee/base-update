@@ -1,5 +1,5 @@
-import {base} from '../../base/core.js';
-import {MainNavigation} from './main-navigation.js';
+import { base } from '../../base/base.js';
+import { MainNavigation } from './main-navigation.js';
 
 export class AppControl extends base.Component
 {

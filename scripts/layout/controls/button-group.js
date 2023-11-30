@@ -1,5 +1,5 @@
-import {base} from '../../base/base.js';
-import {Button, P} from '../atoms/atoms.js';
+import { base } from '../../base/base.js';
+import { Button, P } from '../atoms/atoms.js';
 
 export class ButtonGroup extends base.Component
 {

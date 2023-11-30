@@ -13,16 +13,16 @@ export const Utils =
 	 */
 	removeSlashes(uri)
 	{
-		if(typeof uri === 'string')
+		if (typeof uri === 'string')
 		{
-			if(uri.substr(0, 1) === '/')
+			if (uri.substring(0, 1) === '/')
 			{
-				uri = uri.substr(1);
+				uri = uri.substring(1);
 			}
 
-			if(uri.substr(-1) === '/')
+			if (uri.substring(-1) === '/')
 			{
-				uri = uri.substr(0, uri.length - 1);
+				uri = uri.substring(0, uri.length - 1);
 			}
 		}
 

@@ -1,5 +1,5 @@
-import {MainPanel} from './main-panel.js';
-import {MainTitle, MainSection} from '../atoms/atoms.js';
+import { MainSection, MainTitle } from '../atoms/atoms.js';
+import { MainPanel } from './main-panel.js';
 
 export class CastPanel extends MainPanel
 {

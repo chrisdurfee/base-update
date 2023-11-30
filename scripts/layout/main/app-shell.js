@@ -1,5 +1,5 @@
-import {base} from '../../base/core.js';
-import {AppControl} from './app-control.js';
+import { base } from '../../base/base.js';
+import { AppControl } from './app-control.js';
 
 export class AppShell extends base.Component
 {

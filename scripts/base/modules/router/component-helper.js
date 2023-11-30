@@ -1,3 +1,5 @@
+import { Builder } from "../layout/builder.js";
+
 /**
  * ComponentHelper
  *
@@ -35,7 +37,7 @@ export class ComponentHelper
 	 */
 	focus(params)
 	{
-		if(this.setup === false)
+		if (this.setup === false)
 		{
 			this.create();
 		}
@@ -50,25 +52,41 @@ export class ComponentHelper
 	setupTemplate()
 	{
 		let template = this.template;
-		if(typeof template === 'string')
+		if (typeof template === 'string')
 		{
 			template = this.template = window[template];
+			if (!template)
+			{
+				return;
+			}
 		}
 
-		let type = typeof template;
-		if(type === 'function' || type === 'object')
+		const type = typeof template;
+		if (type === 'function')
 		{
-			if(type === 'object')
+			this.component = new this.template({
+				route: this.route,
+				persist: this.persist,
+				parent: this.parent
+			});
+		}
+		else if (type === 'object')
+		{
+			if (!this.template.isUnit)
 			{
-				let comp = this.component = this.template;
-				comp.route = this.route;
-				comp.persist = true;
-				comp.parent = this.parent;
-				this.persist = true;
+				this.template = Jot(this.template);
 			}
 
-			this.hasTemplate = true;
+			const comp = this.component = this.template;
+			const persist = (comp.persist !== false);
+
+			comp.route = this.route;
+			comp.persist = persist;
+			comp.parent = this.parent;
+			this.persist = persist;
 		}
+
+		this.hasTemplate = true;
 	}
 
 	/**
@@ -77,7 +95,7 @@ export class ComponentHelper
 	 */
 	create()
 	{
-		if(!this.hasTemplate)
+		if (!this.hasTemplate)
 		{
 			return false;
 		}
@@ -85,16 +103,12 @@ export class ComponentHelper
 		this.setup = true;
 
 		let comp = this.component;
-		if(!(this.persist && comp))
+		if (!this.persist || !comp)
 		{
-			comp = this.component = new this.template({
-				route: this.route,
-				persist: this.persist,
-				parent: this.parent
-			});
+			comp = this.component = this.template;
 		}
 
-		comp.setup(this.container);
+		Builder.render(comp, this.container, this.parent);
 	}
 
 	/**
@@ -102,26 +116,26 @@ export class ComponentHelper
 	 */
 	remove()
 	{
-		if(this.setup !== true)
+		if (this.setup !== true)
 		{
 			return false;
 		}
 
 		this.setup = false;
 
-		let component = this.component;
-		if(!component)
+		const component = this.component;
+		if (!component)
 		{
 			return false;
 		}
 
-		if(typeof component.destroy === 'function')
+		if (typeof component.destroy === 'function')
 		{
 			component.destroy();
 		}
 
 		// this will remove the reference to the component if persit is false
-		if(this.persist === false)
+		if (this.persist === false)
 		{
 			this.component = null;
 		}
@@ -135,13 +149,13 @@ export class ComponentHelper
 	 */
 	update(params)
 	{
-		let component = this.component;
-		if(!component)
+		const component = this.component;
+		if (!component)
 		{
 			return false;
 		}
 
-		if(typeof component.update === 'function')
+		if (typeof component.update === 'function')
 		{
 			component.update(params);
 		}

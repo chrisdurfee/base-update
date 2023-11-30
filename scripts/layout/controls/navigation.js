@@ -1,5 +1,5 @@
-import {base, NavLink, Atom} from '../../base/base.js';
-import {Span, H2} from '../atoms/atoms.js';
+import { Atom, NavLink, base } from '../../base/base.js';
+import { H2, Span } from '../atoms/atoms.js';
 
 /**
  * MainLink

@@ -1,35 +1,39 @@
-import {base} from '../../core.js';
-import {Data} from '../data/data.js';
-export {NavLink} from './nav-link.js';
-import {Utils} from './utils.js';
-import {Route} from './route.js';
-import {History} from './history.js';
+import { DataTracker } from '../../main/data-tracker/data-tracker.js';
+import { Events } from '../../main/events/events.js';
+import { Dom } from '../../shared/dom.js';
+import { Data } from '../data/data.js';
+import { HistoryController } from './history/history-controller.js';
+import { Route } from './route.js';
+import { Utils } from './utils.js';
+export { NavLink } from './nav-link.js';
 
-/* this will register the route system to the
-data tracker to remove routes that have been
-nested in layouts. */
-base.dataTracker.addType('routes', (data) =>
+/**
+ * This will register the route system to the data
+ * tracker to remove routes that have been nested
+ * in layouts.
+ */
+DataTracker.addType('routes', (data) =>
 {
-	if(!data)
+	if (!data)
 	{
 		return false;
 	}
 
 	const route = data.route;
-	if(route)
+	if (route)
 	{
 		router.removeRoute(route);
 	}
 });
 
-base.dataTracker.addType('switch', (data) =>
+DataTracker.addType('switch', (data) =>
 {
-	if(!data)
+	if (!data)
 	{
 		return false;
 	}
 
-	let id = data.id;
+	const id = data.id;
 	router.removeSwitch(id);
 });
 
@@ -72,17 +76,19 @@ export class Router
 		 */
 		this.data = new Data(
 		{
-			path: this.location.pathname
+			path: ''
 		});
 	}
 
 	/**
 	 * This will setup our history object.
+	 *
+	 * @protected
+	 * @return {void}
 	 */
 	setupHistory()
 	{
-		this.history = new History(this);
-		this.history.setup();
+		this.history = HistoryController.setup(this);
 	}
 
 	/**
@@ -94,10 +100,10 @@ export class Router
 	 */
 	createRoute(settings)
 	{
-		let uri = settings.uri || '*';
+		const uri = settings.uri || '*';
 		settings.baseUri = this.createURI(uri);
 
-		let route = new Route(settings);
+		const route = new Route(settings);
 		return route;
 	}
 
@@ -109,9 +115,9 @@ export class Router
 	 */
 	add(settings)
 	{
-		if(typeof settings !== 'object')
+		if (typeof settings !== 'object')
 		{
-			let args = arguments;
+			const args = arguments;
 			settings =
 			{
 				uri: args[0],
@@ -124,9 +130,26 @@ export class Router
 		}
 
 		const route = this.createRoute(settings);
-		this.routes.push(route);
-		this.checkRoute(route, this.location.pathname);
+		this.addRoute(route);
 		return route;
+	}
+
+	addRoute(route)
+	{
+		this.routes.push(route);
+		this.checkRoute(route, this.getPath());
+	}
+
+	/**
+	 * This will resume a route.
+	 *
+	 * @param {object} route
+	 * @param {object} container
+	 */
+	resume(route, container)
+	{
+		route.resume(container);
+		this.addRoute(route);
 	}
 
 	/**
@@ -137,10 +160,10 @@ export class Router
 	 */
 	getBasePath()
 	{
-		if(!this.basePath)
+		if (!this.basePath)
 		{
 			let pathURI = this.baseURI || '';
-			if((pathURI[pathURI.length - 1] !== '/'))
+			if ((pathURI[pathURI.length - 1] !== '/'))
 			{
 				pathURI += '/';
 			}
@@ -158,7 +181,7 @@ export class Router
 	 */
 	createURI(uri)
 	{
-		let baseUri = this.getBasePath();
+		const baseUri = this.getBasePath();
 		return (baseUri + Utils.removeSlashes(uri));
 	}
 
@@ -170,14 +193,14 @@ export class Router
 	 */
 	getRoute(uri)
 	{
-		let routes = this.routes,
+		const routes = this.routes,
 		length = routes.length;
-		if(length > 0)
+		if (length > 0)
 		{
-			for(var i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				var route = routes[i];
-				if(route.uri === uri)
+				if (route.uri === uri)
 				{
 					return route;
 				}
@@ -194,14 +217,14 @@ export class Router
 	 */
 	getRouteById(id)
 	{
-		let routes = this.routes,
+		const routes = this.routes,
 		length = routes.length;
-		if(length > 0)
+		if (length > 0)
 		{
-			for(var i = 0; i < length; i++)
+			for (var i = 0; i < length; i++)
 			{
 				var route = routes[i];
-				if(route.id === id)
+				if (route.id === id)
 				{
 					return route;
 				}
@@ -217,9 +240,9 @@ export class Router
 	 */
 	removeRoute(route)
 	{
-		let routes = this.routes,
+		const routes = this.routes,
 		index = routes.indexOf(route);
-		if(index > -1)
+		if (index > -1)
 		{
 			routes.splice(index, 1);
 		}
@@ -233,18 +256,45 @@ export class Router
 	 */
 	addSwitch(group)
 	{
-		let switches = this.switches,
-		id = this.switchCount++,
-		switchArray = switches[id] = [];
+		const id = this.switchCount++;
+		const switchArray = this.getSwitchGroup(id);
 
-		for(var i = 0, length = group.length; i < length; i++)
+		for (var i = 0, length = group.length; i < length; i++)
 		{
 			var route = this.createRoute(group[i]);
 			switchArray.push(route);
 		}
 
-		this.checkGroup(switchArray, this.location.pathname);
+		this.checkGroup(switchArray, this.getPath());
 		return id;
+	}
+
+	/**
+	 * This will resume a switch.
+	 *
+	 * @param {object} group
+	 * @param {object} container
+	 * @return {int} the switch id.
+	 */
+	resumeSwitch(group, container)
+	{
+		const id = this.switchCount++;
+		const switchArray = this.getSwitchGroup(id);
+
+		for (var i = 0, length = group.length; i < length; i++)
+		{
+			var route = group[i].component.route;
+			route.resume(container);
+			switchArray.push(route);
+		}
+
+		this.checkGroup(switchArray, this.getPath());
+		return id;
+	}
+
+	getSwitchGroup(id)
+	{
+		return (this.switches[id] = []);
 	}
 
 	/**
@@ -254,8 +304,8 @@ export class Router
 	 */
 	removeSwitch(id)
 	{
-		let switches = this.switches;
-		if(switches[id])
+		const switches = this.switches;
+		if (switches[id])
 		{
 			delete switches[id];
 		}
@@ -271,8 +321,8 @@ export class Router
 	{
 		uri = this.createURI(uri);
 
-		let route = this.getRoute(uri);
-		if(route !== false)
+		const route = this.getRoute(uri);
+		if (route !== false)
 		{
 			this.removeRoute(route);
 		}
@@ -289,20 +339,34 @@ export class Router
 	setup(baseURI, title)
 	{
 		this.baseURI = baseURI || '/';
+		this.updateBaseTag(this.baseURI);
 		this.title = (typeof title !== 'undefined')? title : '';
 
 		this.setupHistory();
 
+		this.data.set('path', this.getPath());
+
 		this.callBackLink = this.checkLink.bind(this);
-		base.on('click', document, this.callBackLink);
+		Events.on('click', document, this.callBackLink);
 
 		/* this will route to the first url entered
 		when the router loads. this will fix the issue
 		that stopped the first endpoint from being
 		added to the history */
-		let endPoint = this.getEndPoint();
+		const endPoint = this.getEndPoint();
 		this.navigate(endPoint, null, true);
 		return this;
+	}
+
+	updateBaseTag(url)
+	{
+		/* this will modify the base tag to ref from
+		the base url for all xhr */
+		const ele = document.getElementsByTagName('base');
+		if (ele.length)
+		{
+			ele[0].href = url;
+		}
 	}
 
 	/**
@@ -314,9 +378,9 @@ export class Router
 	getParentLink(ele)
 	{
 		let target = ele.parentNode;
-		while(target !== null)
+		while (target !== null)
 		{
-			if(target.nodeName.toLowerCase() === 'a')
+			if (target.nodeName.toLowerCase() === 'a')
 			{
 				return target;
 			}
@@ -334,27 +398,32 @@ export class Router
 	 */
 	checkLink(evt)
 	{
-		let target = evt.target || evt.srcElement;
-		if(target.nodeName.toLowerCase() !== 'a')
+		if (evt.ctrlKey === true)
+		{
+			return true;
+		}
+
+		const target = evt.target || evt.srcElement;
+		if (target.nodeName.toLowerCase() !== 'a')
 		{
 			/* this will check to get the parent to check
 			if the child is contained in a link */
 			target = this.getParentLink(target);
-			if(target === false)
+			if (target === false)
 			{
 				return true;
 			}
 		}
 
-		if(target.target === '_blank' || base.data(target, 'cancel-route'))
+		if (target.target === '_blank' || Dom.data(target, 'cancel-route'))
 		{
 			return true;
 		}
 
-		let href = target.getAttribute('href');
-		if(typeof href !== 'undefined')
+		const href = target.getAttribute('href');
+		if (typeof href !== 'undefined')
 		{
-			let baseUri = this.baseURI,
+			const baseUri = this.baseURI,
 			path = (baseUri !== '/')? href.replace(baseUri, '') : href;
 			this.navigate(path);
 
@@ -412,7 +481,7 @@ export class Router
 	 */
 	updatePath()
 	{
-		let path = this.location.pathname;
+		const path = this.getPath();
 		this.data.set('path', path);
 	}
 
@@ -424,22 +493,22 @@ export class Router
 	 */
 	updateTitle(route)
 	{
-		if(!route || !route.title)
+		if (!route || !route.title)
 		{
 			return this;
 		}
 
-		let getTitle = (title) =>
+		const getTitle = (title) =>
 		{
 			/* this will uppercase each word in a string
 			@param (string) str = the string to uppercase
 			@return (string) the uppercase string */
-			let toTitleCase = (str) =>
+			const toTitleCase = (str) =>
 			{
-				let pattern = /\w\S*/;
+				const pattern = /\w\S*/;
 				return str.replace(pattern, (txt) =>
 				{
-					return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+					return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
 				});
 			};
 
@@ -447,14 +516,14 @@ export class Router
 			/* this will replace the params in the title
 			@param (string) str = the route title
 			@return (string) the title string */
-			let replaceParams = (str) =>
+			const replaceParams = (str) =>
 			{
-				if(str.indexOf(':') > -1)
+				if (str.indexOf(':') > -1)
 				{
-					let params = route.stage;
-					for(var prop in params)
+					const params = route.stage;
+					for (var prop in params)
 					{
-						if(params.hasOwnProperty(prop))
+						if (params.hasOwnProperty(prop))
 						{
 							var param = params[prop],
 							pattern = new RegExp(':' + prop, 'gi');
@@ -465,17 +534,21 @@ export class Router
 				return str;
 			};
 
-			if(title)
+			if (title)
 			{
+				if (typeof title === 'function')
+				{
+					title = title(route.stage);
+				}
+
 				/* we want to replace any params in the title
 				and uppercase the title */
 				title = replaceParams(title);
-				let pattern = /-/g;
-				title = toTitleCase(title.replace(pattern, ' '));
+				title = toTitleCase(title);
 
 				/* we want to check to add the base title to the
 				to the end of the title */
-				if(this.title !== '')
+				if (this.title !== '')
 				{
 					title += " - " + this.title;
 				}
@@ -483,7 +556,7 @@ export class Router
 			return title;
 		};
 
-		let title = route.title;
+		const title = route.title;
 		document.title = getTitle(title);
 	}
 
@@ -495,19 +568,19 @@ export class Router
 	 */
 	checkActiveRoutes(path)
 	{
-		this.lastPath = path;
+		this.lastPath = this.path;
 
 		path = path || this.getPath();
 		this.path = path;
 
-		let routes = this.routes,
+		const routes = this.routes,
 		length = routes.length;
 
 		let route;
-		for(var i = 0; i < length; i++)
+		for (var i = 0; i < length; i++)
 		{
 			route = routes[i];
-			if(typeof route === 'undefined')
+			if (typeof route === 'undefined')
 			{
 				continue;
 			}
@@ -527,10 +600,10 @@ export class Router
 	 */
 	checkSwitches(path)
 	{
-		let switches = this.switches;
-		for(var id in switches)
+		const switches = this.switches;
+		for (var id in switches)
 		{
-			if(switches.hasOwnProperty(id) === false)
+			if (switches.hasOwnProperty(id) === false)
 			{
 				continue;
 			}
@@ -552,29 +625,29 @@ export class Router
 		let check = false,
 		route, firstRoute, lastSelected, selected, hasController = false;
 
-		for(var i = 0, length = group.length; i < length; i++)
+		for (var i = 0, length = group.length; i < length; i++)
 		{
 			route = group[i];
-			if(typeof route === 'undefined')
+			if (typeof route === 'undefined')
 			{
 				continue;
 			}
 
 			/* we want to save the first route in the switch
 			so it can be selected if no route is active */
-			if(i === 0)
+			if (i === 0)
 			{
 				firstRoute = route;
 			}
 
-			if(!lastSelected && route.get('active'))
+			if (!lastSelected && route.get('active'))
 			{
 				lastSelected = route;
 			}
 
-			if(check !== false)
+			if (check !== false)
 			{
-				if(hasController)
+				if (hasController)
 				{
 					route.deactivate();
 				}
@@ -583,11 +656,11 @@ export class Router
 
 			/* we will break the loop on the first match */
 			check = route.match(path);
-			if(check !== false)
+			if (check !== false)
 			{
 				selected = route;
 
-				if(route.controller)
+				if (route.controller)
 				{
 					this.select(route);
 					hasController = true;
@@ -595,28 +668,27 @@ export class Router
 			}
 		}
 
-		if(selected === undefined)
+		if (selected === undefined)
 		{
 			this.select(firstRoute);
 
-			if(lastSelected && firstRoute !== lastSelected)
+			if (lastSelected && firstRoute !== lastSelected)
+			{
+				lastSelected.deactivate();
+			}
+			return;
+		}
+
+		if (lastSelected)
+		{
+			if (hasController && selected !== lastSelected)
 			{
 				lastSelected.deactivate();
 			}
 		}
-		else
+		else if (firstRoute && hasController === false)
 		{
-			if(lastSelected)
-			{
-				if(hasController && selected !== lastSelected)
-				{
-					lastSelected.deactivate();
-				}
-			}
-			else if(firstRoute && hasController === false)
-			{
-				this.select(firstRoute);
-			}
+			this.select(firstRoute);
 		}
 	}
 
@@ -629,8 +701,8 @@ export class Router
 	 */
 	checkRoute(route, path)
 	{
-		let check = this.check(route, path);
-		if(check !== false)
+		const check = this.check(route, path);
+		if (check !== false)
 		{
 			this.select(route);
 		}
@@ -651,7 +723,7 @@ export class Router
 	{
 		/* we want to check if the route has been
 		deleted from the routes */
-		if(!route)
+		if (!route)
 		{
 			return false;
 		}
@@ -671,7 +743,7 @@ export class Router
 	 */
 	select(route)
 	{
-		if(!route)
+		if (!route)
 		{
 			return false;
 		}
@@ -688,7 +760,7 @@ export class Router
 	 */
 	getEndPoint()
 	{
-		let path = this.getPath();
+		const path = this.getPath();
 		return (path.replace(this.baseURI, '') || '/');
 	}
 
@@ -697,7 +769,7 @@ export class Router
 	 */
 	destroy()
 	{
-		base.off('click', document, this.callBackLink);
+		Events.off('click', document, this.callBackLink);
 	}
 
 	/**
@@ -710,6 +782,11 @@ export class Router
 		/* we want to get the window location path */
 		let location = this.location,
 		path = this.path = location.pathname;
+
+		if (this.history.type === 'hash')
+		{
+			return location.hash.replace('#', '');
+		}
 
 		return path + location.search + location.hash;
 	}

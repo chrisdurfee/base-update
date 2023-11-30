@@ -1,7 +1,7 @@
-import {MainController} from './main-controller.js';
-import {HomePanel} from './modules/home-panel.js';
-import {SynopsisPanel} from './modules/synopsis-panel.js';
-import {CastPanel} from './modules/cast-panel.js';
+import { MainController } from './main-controller.js';
+import { CastPanel } from './modules/cast-panel.js';
+import { HomePanel } from './modules/home-panel.js';
+import { SynopsisPanel } from './modules/synopsis-panel.js';
 
 /**
  * This will create a route object.

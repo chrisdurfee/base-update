@@ -1,5 +1,5 @@
-import {base} from '../base/core.js';
-import {AppShell} from './main/app-shell.js';
+import { base } from '../base/base.js';
+import { AppShell } from './main/app-shell.js';
 
 /**
  * MainController
@@ -25,22 +25,6 @@ export class MainController
 	setupService()
 	{
 		return;
-		if (!('serviceWorker' in navigator))
-		{
-			return false;
-		}
-
-		var sw = navigator.serviceWorker;
-		if (sw.controller)
-		{
-			// the service worker is registered
-			return false;
-		}
-
-		sw.register('./sw.js').then(function()
-		{
-
-		});
 	}
 
 	/**

@@ -1,3 +1,5 @@
+import { WatcherHelper } from './watcher-helper.js';
+
 /**
  * LayoutParser
  *
@@ -18,9 +20,21 @@ export class LayoutParser
 			'onCreated',
 			'route',
 			'switch',
+			'useParent',
+			'useState',
+			'useData',
+			'addState',
+			'map',
+			'for',
+			'html',
 			'onSet',
 			'onState',
 			'watch',
+			'context',
+			'useContext',
+			'addContext',
+			'role',
+			'aria',
 			'cache'
 		];
 	}
@@ -44,6 +58,20 @@ export class LayoutParser
 	}
 
 	/**
+	 * This will setup the element children.
+	 *
+	 * @param {object} obj
+	 */
+	setupChildren(obj)
+	{
+		if (obj.nest)
+		{
+			obj.children = obj.nest;
+			obj.nest = null;
+		}
+	}
+
+	/**
 	 * This will parse a layout element.
 	 *
 	 * @param {object} obj
@@ -55,44 +83,53 @@ export class LayoutParser
 		children = [];
 
 		let tag = this.getElementTag(obj);
-		if(tag === 'button')
+		if (tag === 'button')
 		{
 			attr.type = attr.type || 'button';
 		}
 
-		if(typeof obj.children === 'undefined')
-		{
-			obj.children = null;
-		}
-
+		this.setupChildren(obj);
 		const reserved = this._reserved;
 
 		for (var key in obj)
 		{
-			if (obj.hasOwnProperty(key))
+			if (!obj.hasOwnProperty(key))
 			{
-				var value = obj[key];
-				if (value === null || reserved.indexOf(key) !== -1)
-				{
-					continue;
-				}
+				continue;
+			}
 
-				/* we need to filter the children from the attr
-				settings. the children need to keep their order. */
-				if (typeof value !== 'object')
+			var value = obj[key];
+			if (value === undefined || value === null)
+			{
+				continue;
+			}
+
+			if (reserved.indexOf(key) !== -1)
+			{
+				continue;
+			}
+
+			/* we need to filter the children from the attr
+			settings. the children need to keep their order. */
+			if (typeof value !== 'object')
+			{
+				attr[key] = value;
+			}
+			else
+			{
+				if (key === 'children')
 				{
-					attr[key] = value;
+					//Array.prototype.push.apply(children, value);
+					children = children.concat(value);
 				}
 				else
 				{
-					if (key === 'children')
+					if (WatcherHelper.hasParams(value))
 					{
-						children = children.concat(value);
+
 					}
-					else
-					{
-						children.push(value);
-					}
+
+					children.push(value);
 				}
 			}
 		}
