@@ -24,18 +24,12 @@ export class MainNavigation extends Component
 
 	addLogo()
 	{
-		return A(
-		{
-			class: 'logo',
-			href: './',
-			nest:
-			[
-				{
-					tag: 'img',
-					src: 'images/life-logo.svg'
-				}
-			]
-		});
+		return A({ class: 'logo', href: './' }, [
+			{
+				tag: 'img',
+				src: 'images/life-logo.svg'
+			}
+		]);
 	}
 
 	addPrimaryNav()

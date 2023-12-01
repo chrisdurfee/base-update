@@ -20,8 +20,7 @@ export const Button = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'button',
-		class: props.class || 'bttn',
-		click: props.click || null
+		...props,
 	}, children);
 });
 
@@ -30,23 +29,29 @@ export const MainSection = Atom((props, children) =>
 	return Tag({
 		tag: 'section',
 		class: 'main-panel ' + (props.class || ''),
+		...props
 	}, children);
 });
 
 export const Header = Atom((props, children) => Tag(
 {
-	tag: 'header'
+	tag: 'header',
+	...props,
 }, children));
 
-export const H1 = Atom((props, children) => Tag(
+export const H1 = Atom((props, children) =>
 {
-	tag: 'h1',
-}, children));
+	return Tag(
+	{
+		tag: 'h1',
+		...props,
+	}, children);
+});
 
 export const H2 = Atom((props, children) => Tag(
 {
-	tag: 'h2',
 	...props,
+	tag: 'h2',
 }, children));
 
 export const Span = Atom((props, children) =>
@@ -66,34 +71,30 @@ export const Br = () =>
 
 export const MainTitle = (props) =>
 {
-	return Header({
-		nest: [
-			H1({
-				text: props.text,
-				watch: props.watch
-			})
-		]
-	});
+	return Header([
+		H1(props)
+	]);
 };
 
 export const P = Atom((props, children) => Tag(
 {
-	tag: 'p'
+	tag: 'p',
+	...props,
 }, children));
 
 export const A = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'a',
-		href: props.href || null,
-		watch: props.watch || null
+		...props,
 	}, children);
 });
 
 export const Label = Atom((props, children) =>
 {
 	return Tag({
-		tag: 'label'
+		tag: 'label',
+		...props,
 	}, children);
 });
 
@@ -101,7 +102,6 @@ export const Input = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'input',
-		type: props.type || 'text',
-		placeholder: props.placeholder || null
+		...props,
 	}, children);
 });

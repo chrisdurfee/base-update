@@ -89,21 +89,18 @@ export class HomePanel extends MainPanel
 							nest: [
 								Row([
 									Button({
-										text: 'Change Loaded',
 										click: () =>
 										{
 											this.toggleLoaded();
 										}
-									})
+									}, 'Change Loaded')
 								])
 							]
 						});
 					}
 
 					return [
-						MainTitle({
-							text: 'Title'
-						}),
+						MainTitle('Title'),
 						{
 							tag: 'section',
 							class: 'body',

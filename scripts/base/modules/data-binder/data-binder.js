@@ -147,7 +147,7 @@ export class DataBinder
 	setupConnection(element, data, prop, customAttr, filter)
 	{
 		const id = this.getBindId(element),
-		connection = new TwoWayConnection(),
+		connection = new TwoWayConnection(this.pubSub),
 
 		/**
 		 * This will create the data source and
@@ -201,7 +201,11 @@ export class DataBinder
 	setBindId(element)
 	{
 		const id = 'db-' + this.idCount++;
-		element.dataset[this.attr] = id;
+
+		if (element.dataset)
+		{
+			element.dataset[this.attr] = id;
+		}
 		element[this.attr] = id;
 		return id;
 	}

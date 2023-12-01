@@ -77,12 +77,12 @@ export class Builder
 	/**
 	 * This will rebuild a layout.
 	 *
-	 * @param {object} ele
 	 * @param {object} layout
+	 * @param {object} ele
 	 * @param {object} parent
 	 * @return {object}
 	 */
-	static rebuild(ele, layout, parent)
+	static rebuild(layout, ele, parent)
 	{
 		HtmlHelper.removeAll(ele);
 		return this.build(layout, ele, parent);
@@ -124,7 +124,7 @@ export class Builder
 	 */
 	static createElement(obj, container, parent)
 	{
-		const settings = Parser.parse(obj),
+		const settings = Parser.parse(obj, parent),
 		ele = this.createNode(settings, container, parent);
 
 		const propName = obj.cache;
@@ -270,8 +270,8 @@ export class Builder
 		const tag = settings.tag;
 		if (tag === 'text')
 		{
-			const attr = settings.attr;
-			const text = attr.textContent || attr.text;
+			const child = settings.attr[0];
+			const text = (child)? child.value : '';
 			return HtmlHelper.createText(text, container);
 		}
 		else if (tag === 'comment')
@@ -281,7 +281,7 @@ export class Builder
 			return HtmlHelper.createComment(text, container);
 		}
 
-		return HtmlHelper.create(tag, settings.attr, settings.content, container, parent);
+		return HtmlHelper.create(tag, settings.attr, container, parent);
 	}
 }
 
