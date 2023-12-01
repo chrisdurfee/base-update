@@ -1,7 +1,9 @@
 import { base } from './main/base.js';
 import { Ajax } from './modules/ajax/ajax.js';
 import { Atom } from './modules/atom/atom.js';
-import { Component, Jot, Unit } from './modules/component/component.js';
+import { Component } from './modules/component/component.js';
+import { Jot } from './modules/component/jot.js';
+import { Unit } from './modules/component/unit.js';
 import { dataBinder } from './modules/data-binder/data-binder.js';
 import { Data, Model, SimpleData } from './modules/data/data.js';
 import { Builder } from './modules/layout/builder.js';
