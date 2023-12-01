@@ -1,7 +1,42 @@
 import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
+import { addContext, context, useContext } from './directives/core/context/context-directives.js';
+import { addState, cache, useData, useParent, useState } from './directives/core/parent/parent-directives.js';
+import { forEach } from './directives/core/reactive/for-each.js';
+import { map } from './directives/core/reactive/map.js';
+import { onCreated } from './directives/core/reactive/on-created.js';
+import { onDestroyed } from './directives/core/reactive/on-destroyed.js';
+import { onSet } from './directives/core/reactive/on-set.js';
+import { onState } from './directives/core/reactive/on-state.js';
+import { watch } from './directives/core/reactive/watch.js';
+import { addRoute } from './directives/core/route.js';
+import { addSwitch } from './directives/core/switch.js';
+import { Directives } from './directives/directives.js';
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
+
+Directives
+	.add('cache', cache)
+	.add('onCreated', onCreated)
+	.add('onDestroyed', onDestroyed)
+	.add('bind', bind)
+	.add('onSet', onSet)
+	.add('onState', onState)
+	.add('watch', watch)
+	.add('useParent', useParent)
+	.add('useData', useData)
+	.add('useState', useState)
+	.add('addState', addState)
+	.add('map', map)
+	.add('for', forEach)
+	.add('html', addHtml)
+	.add('useContext', useContext)
+	.add('addContext', addContext)
+	.add('context', context)
+	.add('role', addRole)
+	.add('aria', addAria)
+	.add('route', addRoute)
+	.add('switch', addSwitch);
 
 /**
  * Builder
@@ -263,16 +298,16 @@ export class Builder
 		{
 			const attr = settings.attr;
 			const text = attr.textContent || attr.text;
-			return HtmlHelper.createComment(text, container);
+			return HtmlHelper.createText(text, container);
 		}
 		else if (tag === 'comment')
 		{
 			const attr = settings.attr;
 			const text = attr.text;
-			return HtmlHelper.createText(text, container);
+			return HtmlHelper.createComment(text, container);
 		}
 
-		return HtmlHelper.create(tag, settings.attr, container, parent);
+		return HtmlHelper.create(tag, settings.attr, settings.content, container, parent);
 	}
 }
 

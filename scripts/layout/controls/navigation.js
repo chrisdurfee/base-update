@@ -1,4 +1,4 @@
-import { Atom, Component, NavLink, base } from '../../base/base.js';
+import { Atom, Component, NavLink, State } from '../../base/base.js';
 import { H2, Span } from '../atoms/atoms.js';
 
 /**
@@ -183,7 +183,7 @@ export class DeepNavigation extends Navigation
 	{
 		option.callBack = function(e)
 		{
-			base.state.set('app-control', 'ignoreHover', true);
+			State.set('app-control', 'ignoreHover', true);
 		};
 
 		var link = new MainLink(option);
