@@ -2,10 +2,7 @@ import { Atom } from '../../base/base.js';
 
 export const Tag = Atom((props, children) =>
 {
-	return {
-		class: props.class,
-		nest: children,
-	};
+	return {...props, children};
 });
 
 export const Video = Atom((props) =>
@@ -23,7 +20,7 @@ export const Button = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'button',
-		className: props.className || 'bttn',
+		class: props.class || 'bttn',
 		click: props.click || null
 	}, children);
 });
@@ -32,7 +29,7 @@ export const MainSection = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'section',
-		className: 'main-panel ' + (props.className || ''),
+		class: 'main-panel ' + (props.class || ''),
 	}, children);
 });
 

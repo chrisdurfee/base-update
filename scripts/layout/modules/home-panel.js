@@ -80,24 +80,22 @@ export class HomePanel extends MainPanel
 				['loaded', {
 					loaded: true
 				}],
-				['loaded', (ele, val) =>
+				['loaded', (val) =>
 				{
 					if(val === false)
 					{
 						return P({
 							text: 'Not Loaded',
 							nest: [
-								Row({
-									nest: [
-										Button({
-											text: 'Change Loaded',
-											click: () =>
-											{
-												this.toggleLoaded();
-											}
-										})
-									]
-								})
+								Row([
+									Button({
+										text: 'Change Loaded',
+										click: () =>
+										{
+											this.toggleLoaded();
+										}
+									})
+								])
 							]
 						});
 					}
@@ -109,106 +107,84 @@ export class HomePanel extends MainPanel
 						{
 							tag: 'section',
 							class: 'body',
-							row: Row(
-							{
-								nest:
-								[
-									{ class: 'col'},
-									{
-										class: 'col',
-										nest: [
-											new ButtonGroup(),
-											{
-												class: 'container',
-												nest: [
-													Row({
-														nest: [
-															H2({
-																watch: '[[firstName]] [[lastName]] is so cool.'
-															})
-														]
+							row: Row([
+								{ class: 'col'},
+								{
+									class: 'col',
+									nest: [
+										new ButtonGroup(),
+										{
+											class: 'container',
+											nest: [
+												Row([
+													H2('[[firstName]] [[lastName]] is so cool.')
+												]),
+												Row([
+													Label({
+														text: 'First Name'
 													}),
-													Row({
-														nest: [
-															Label({
-																text: 'First Name'
-															}),
-															Input({
-																bind: 'firstName'
-															})
-														]
-													}),
-													Row({
-														nest: [
-															Label({
-																text: 'Last Name'
-															}),
-															Input({
-																bind: 'lastName'
-															})
-														]
-													}),
-													Row({
-														nest: [
-															A({
-																bind: ['href:firstName', 'https://google.com/[[value]]'],
-																watch: 'Search [[firstName]] [[lastName]]'
-															})
-														]
-													}),
-													Row({
-														nest: [
-															P({
-																bind: ['lastName', (value) =>
-																{
-																	return ' I like the last name: ' + value;
-																}]
-															})
-														]
-													}),
-													Row({
-														nest: [
-															Button({
-																text: 'Change Name',
-																click: () =>
-																{
-																	this.updateName();
-																}
-															})
-														]
-													}),
-													Row({
-														nest: [
-															Button({
-																text: 'Change Loaded',
-																click: () =>
-																{
-																	this.toggleLoaded();
-																}
-															})
-														]
-													}),
-													Row({
-														nest: [
-															Button({
-																text: 'Call Service',
-																click: () =>
-																{
-																	console.log(this.testModel)
-																	this.testModel.xhr.add('', (response) =>
-																	{
-																		console.log(response);
-																	});
-																}
-															})
-														]
+													Input({
+														bind: 'firstName'
 													})
-												]
-											}
-										]
-									}
-								]
-							})
+												]),
+												Row([
+													Label({
+														text: 'Last Name'
+													}),
+													Input({
+														bind: 'lastName'
+													})
+												]),
+												Row([
+													A({
+														bind: ['href:firstName', 'https://google.com/[[value]]'],
+														watch: 'Search [[firstName]] [[lastName]]'
+													})
+												]),
+												Row([
+													P({
+														bind: ['lastName', (value) =>
+														{
+															return ' I like the last name: ' + value;
+														}]
+													})
+												]),
+												Row([
+													Button({
+														text: 'Change Name',
+														click: () =>
+														{
+															this.updateName();
+														}
+													})
+												]),
+												Row([
+													Button({
+														text: 'Change Loaded',
+														click: () =>
+														{
+															this.toggleLoaded();
+														}
+													})
+												]),
+												Row([
+													Button({
+														text: 'Call Service',
+														click: () =>
+														{
+															console.log(this.testModel)
+															this.testModel.xhr.add('', (response) =>
+															{
+																console.log(response);
+															});
+														}
+													})
+												])
+											]
+										}
+									]
+								}
+							])
 						}
 					]
 				}]
