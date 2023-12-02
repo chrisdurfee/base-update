@@ -111,7 +111,7 @@ export class HomePanel extends MainPanel
 									nest: [
 										new ButtonGroup(),
 										{
-											class: 'container',
+											class: 'container [[firstName]]',
 											nest: [
 												Row([
 													H2('[[firstName]] [[lastName]] is so cool.')
@@ -135,8 +135,10 @@ export class HomePanel extends MainPanel
 												Row([
 													A({
 														bind: ['href:firstName', 'https://google.com/[[value]]'],
+														target: '_blank',
 														watch: 'Search [[firstName]] [[lastName]]'
-													})
+													}),
+													A({href: 'https://google.com/[[firstName]]', target: '_blank'}, '[[firstName]] and [[lastName]]')
 												]),
 												Row([
 													P({
@@ -144,7 +146,8 @@ export class HomePanel extends MainPanel
 														{
 															return ' I like the last name: ' + value;
 														}]
-													})
+													}),
+													P('I like the last name: [[lastName]] [[firstName]]')
 												]),
 												Row([
 													Button({

@@ -127,10 +127,10 @@ export class TabNavigation extends base.Component
 	afterSetup()
 	{
 		var path = base.router.data.get('path');
-		this.updateLinks(null, path);
+		this.updateLinks(path, null);
 	}
 
-	updateLinks(ele, value)
+	updateLinks(value)
 	{
 		var check = false,
 		links = this.links,
