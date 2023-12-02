@@ -3,7 +3,7 @@ html, body{
 	padding:0px;
 	width: 100%;
 	height: 100%;
-	background:#F1F2F2;
+	background: #272c3a;
 	overflow: hidden;
 }
 
@@ -91,7 +91,7 @@ button{
 }
 .app-container .active-panel-container{
 	position: absolute;
-	background: #f4f2f5;
+	background: #272c3a;
 	z-index: 1;
 	width: auto;
 	min-width: 900px;

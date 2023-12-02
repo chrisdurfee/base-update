@@ -4,9 +4,22 @@
 	font-family: 'lato';
 	font-size: 16px;
 	-webkit-font-smoothing: antialiased;
+	color: #FFF;
+}
+
+input, select, textarea {
+	padding: 8px 10px;
+	border: 1px solid #2C3643;
+	background: #313749;
 }
 
 ::selection {
 	color: #FFF;
 	background: #3577C0;
+}
+
+button {
+	padding: 8px 10px;
+	border: 1px solid #2C3643;
+	background: #313749;
 }
