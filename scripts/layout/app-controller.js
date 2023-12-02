@@ -49,9 +49,9 @@ export class AppController extends MainController
 	getRoutes()
 	{
 		return [
-			addRoute('/', HomePanel, 'Example'),
-			addRoute('/synopsis/:page?*', SynopsisPanel, 'Synopsis'),
-			addRoute('/cast', CastPanel, 'Cast')
+			addRoute('/', new HomePanel(), 'Example'),
+			addRoute('/synopsis/:page?*', new SynopsisPanel(), 'Synopsis'),
+			addRoute('/cast', new CastPanel(), 'Cast')
 		];
 	}
 
