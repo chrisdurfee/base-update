@@ -8,29 +8,24 @@ export class SynopsisPanel extends MainPanel
 {
 	render()
 	{
-        var route = this.route;
+        const route = this.route;
 
 		return MainSection(
-		{
-			class: 'synopsis-panel',
-			nest:
-			[
-				MainTitle({
-                    text: 'Synopsis',
-					watch: {
-                        value: ['Synopsis [[page]]', route]
-                    }
-                }),
-				{
-					tag: 'section',
-					class: 'body',
-					row:
-					{
-						class: 'row',
-						nest:
-						[
-							{ class: 'col'},
-							{
+            {
+                class: 'synopsis-panel'
+            },
+            [
+                MainTitle(['Synopsis [[page]]', route]),
+                {
+                    tag: 'section',
+                    class: 'body',
+                    row:
+                    {
+                        class: 'row',
+                        nest:
+                        [
+                            { class: 'col'},
+                            {
                                 class: 'col',
                                 tab: new Tab(
                                 {
@@ -46,7 +41,7 @@ export class SynopsisPanel extends MainPanel
                                             uri: 'synopsis/super*',
                                             component: new Panel(
                                             {
-                                                children:
+                                                nest:
                                                 [
                                                     {
                                                         text: 'before tab',
@@ -78,11 +73,11 @@ export class SynopsisPanel extends MainPanel
                                     ]
                                 })
                             }
-						]
-					}
-				}
-			]
-		});
+                        ]
+                    }
+                }
+            ]
+        );
     }
 
     createTab(label, link, text)
@@ -92,7 +87,7 @@ export class SynopsisPanel extends MainPanel
             href: link,
             component: new Panel(
             {
-                text: text
+                text
             })
         };
     }

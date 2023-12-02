@@ -5,28 +5,21 @@ export class CastPanel extends MainPanel
 {
 	render()
 	{
-		return MainSection(
-		{
-			class: 'cast-panel',
-			nest:
-			[
-				MainTitle({
-					text: 'Cast'
-				}),
+		return MainSection({ class: 'cast-panel'}, [
+			MainTitle('Cast'),
+			{
+				tag: 'section',
+				class: 'body',
+				row:
 				{
-					tag: 'section',
-					class: 'body',
-					row:
-					{
-						class: 'row',
-						nest:
-						[
-							{ class: 'col'},
-							{ class: 'col'}
-						]
-					}
+					class: 'row',
+					nest:
+					[
+						{ class: 'col'},
+						{ class: 'col'}
+					]
 				}
-			]
-		});
+			}
+		]);
 	}
 }

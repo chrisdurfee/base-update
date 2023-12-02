@@ -1,3 +1,5 @@
+import { WatcherHelper } from "../layout/watcher-helper.js";
+
 /**
  * This will prepare the children.
  *
@@ -52,9 +54,19 @@ const parseArgs = (args) =>
 
 	if (Array.isArray(first))
 	{
+		if (WatcherHelper.isWatching(first) === false)
+		{
+			return {
+				props: {},
+				children: first
+			};
+		}
+
 		return {
-			props: {},
-			children: first
+			props: {
+				watch: first
+			},
+			children: []
 		};
 	}
 
