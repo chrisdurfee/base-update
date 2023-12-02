@@ -4,6 +4,18 @@ import { Panel } from '../controls/panel.js';
 import { Tab } from '../controls/tab.js';
 import { MainPanel } from './main-panel.js';
 
+const TabPanel = (props) =>
+{
+    return {
+        label: props.label,
+        href: props.link,
+        component: new Panel(
+        {
+            text: props.text
+        })
+    };
+};
+
 export class SynopsisPanel extends MainPanel
 {
 	render()
@@ -31,10 +43,26 @@ export class SynopsisPanel extends MainPanel
                                 {
                                     options: [
                                         //this.createTab('Synopsis', 'synopsis', 'what would be the Synopsis?'),
-                                        this.createTab('Story', 'synopsis/story', 'this would tell about the story'),
-                                        this.createTab('Book', 'synopsis/book', 'did thhis come from a book?'),
-                                        this.createTab('Concepts', 'synopsis/concepts', ''),
-                                        this.createTab('More', 'synopsis/more', 'More...'),
+                                        TabPanel({
+                                            label: 'Story',
+                                            link: 'story',
+                                            text: 'this would tell about the story'
+                                        }),
+                                        TabPanel({
+                                            label: 'Book',
+                                            link: 'synopsis/book',
+                                            text: 'dud this come from a book?'
+                                        }),
+                                        TabPanel({
+                                            label: 'Concepts',
+                                            link: 'synopsis/concepts',
+                                            text: ''
+                                        }),
+                                        TabPanel({
+                                            label: 'More',
+                                            link: 'synopsis/more',
+                                            text: 'More...'
+                                        }),
                                         {
                                             label: 'Super Tab',
                                             href: 'synopsis/super',
@@ -50,8 +78,16 @@ export class SynopsisPanel extends MainPanel
                                                     new Tab(
                                                     {
                                                         options: [
-                                                            this.createTab('Story', 'synopsis/super/first', 'First'),
-                                                            this.createTab('Book', 'synopsis/super/second', 'Second')
+                                                            TabPanel({
+                                                                label: 'Story',
+                                                                link: 'synopsis/super/first',
+                                                                text: 'First'
+                                                            }),
+                                                            TabPanel({
+                                                                label: 'Book',
+                                                                link: 'synopsis/super/second',
+                                                                text: 'Second'
+                                                            })
                                                         ]
                                                     }),
                                                     {
@@ -60,8 +96,16 @@ export class SynopsisPanel extends MainPanel
                                                     new Tab(
                                                     {
                                                         options: [
-                                                            this.createTab('Third', 'synopsis/super/thirds', 'another tab'),
-                                                            this.createTab('Fourth', 'synopsis/super/fourth', 'too many tabs')
+                                                            TabPanel({
+                                                                label: 'Third',
+                                                                link: 'synopsis/super/third',
+                                                                text: 'Third'
+                                                            }),
+                                                            TabPanel({
+                                                                label: 'Fourth',
+                                                                link: 'synopsis/super/fourth',
+                                                                text: 'Fourth'
+                                                            })
                                                         ]
                                                     }),
                                                     {
@@ -78,17 +122,5 @@ export class SynopsisPanel extends MainPanel
                 }
             ]
         );
-    }
-
-    createTab(label, link, text)
-    {
-        return {
-            label,
-            href: link,
-            component: new Panel(
-            {
-                text
-            })
-        };
     }
 }

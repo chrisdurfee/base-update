@@ -33,11 +33,11 @@ export class TabLink extends base.Component
 			className: 'option',
 			a: {
 				tag: 'a',
-				className: this.className || null,
+				class: this.className || null,
 				onState: ['selected', onState],
 				href: this.getString(href),
 				text: this.getString(text),
-				children: this.children,
+				nest: this.children,
 				watch: watchers,
 				cache: 'link'
 			}
@@ -111,7 +111,7 @@ export class TabNavigation extends base.Component
 	{
 		return {
 			tag: 'nav',
-			className: 'tab',
+			class: 'tab',
 			ul:
 			{
 				tag: 'ul',
