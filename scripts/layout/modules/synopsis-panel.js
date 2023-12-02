@@ -45,7 +45,7 @@ export class SynopsisPanel extends MainPanel
                                         //this.createTab('Synopsis', 'synopsis', 'what would be the Synopsis?'),
                                         TabPanel({
                                             label: 'Story',
-                                            link: 'story',
+                                            link: 'synopsis/story',
                                             text: 'this would tell about the story'
                                         }),
                                         TabPanel({
