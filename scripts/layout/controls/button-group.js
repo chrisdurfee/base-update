@@ -1,5 +1,4 @@
-import { Component } from '../../base/base.js';
-import { Atom } from '../../base/base.js';
+import { Atom, Component } from '../../base/base.js';
 import { Button, P } from '../atoms/atoms.js';
 
 const Buttons = Atom((props, children) =>
