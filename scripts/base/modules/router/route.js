@@ -14,24 +14,24 @@ const routePattern = (uri) =>
 	if (uri)
 	{
 		const filter = /\//g;
-		uriQuery = uri.replace(filter, "\/");
+		uriQuery = uri.replace(filter, "/");
 
 		/* this will setup for optional slashes before the optional params */
-		const optionalSlash = /(\/):[^\/(]*?\?/g;
+		const optionalSlash = /(\/):[^/(]*?\?/g;
 		uriQuery = uriQuery.replace(optionalSlash, (str) =>
 		{
 			const pattern = /\//g;
-			return str.replace(pattern, '(?:$|\/)');
+			return str.replace(pattern, '(?:$|/)');
 		});
 
 		/* this will setup for optional params and params
 		and stop at the last slash or query start */
-		const param = /(:[^\/?&($]+)/g;
+		const param = /(:[^/?&($]+)/g;
 		const optionalParams = /(\?\/+\*?)/g;
-		uriQuery = uriQuery.replace(optionalParams, '?\/*');
+		uriQuery = uriQuery.replace(optionalParams, '?/*');
 		uriQuery = uriQuery.replace(param, (str) =>
 		{
-			return (str.indexOf('.') < 0)? '([^\/|?]+)' : '([^\/|?]+.*)';
+			return (str.indexOf('.') < 0)? '([^/|?]+)' : '([^/|?]+.*)';
 		});
 
 		/* we want to setup the wild card and param
@@ -80,10 +80,10 @@ const paramPattern = (uri) =>
 		return params;
 	}
 
-	const filter = /[\*?]/g;
+	const filter = /[*?]/g;
 	uri = uri.replace(filter, '');
 
-	const pattern = /:(.[^.\/?&($]+)\?*/g,
+	const pattern = /:(.[^./?&($]+)\?*/g,
 	matches = uri.match(pattern);
 	if (matches === null)
 	{
@@ -116,20 +116,23 @@ export class Route extends SimpleData
 	/**
 	 * @constructor
 	 * @param {object} settings
+	 * @param {function} titleCallBack
 	 */
-	constructor(settings)
+	constructor(settings, titleCallBack)
 	{
 		const uri = settings.baseUri;
 
 		const paramKeys = paramPattern(uri);
 		const params = getParamDefaults(paramKeys);
-		super(params);
+		const proxy = super(params);
 
 		this.uri = uri;
 		this.paramKeys = paramKeys;
+		this.titleCallBack = titleCallBack;
 
 		this.setupRoute(settings);
 		this.set('active', false);
+		return proxy;
 	}
 
 	/**
@@ -167,10 +170,7 @@ export class Route extends SimpleData
 	 */
 	setTitle(title)
 	{
-		base.router.updateTitle({
-			title: title,
-			stage: this.stage
-		});
+		this.titleCallBack(this, title);
 	}
 
 	/**

@@ -242,7 +242,7 @@ const render = (layout, ele, parent) =>
  */
 const Comment = (props) => ({
     tag: 'comment',
-    text: 'import placeholder',
+    textContent: 'import placeholder',
     onCreated: props.onCreated
 });
 
@@ -307,7 +307,7 @@ const ImportWrapper = Jot(
      */
     getLayout(module)
     {
-        const layout = module.default;
+        let layout = module.default;
         if (!layout)
         {
             return null;

@@ -24,7 +24,7 @@ const setupDefaultAttr = (settings) =>
 
 	for (var prop in defaults)
 	{
-		if (!defaults.hasOwnProperty(prop))
+		if (!Object.prototype.hasOwnProperty.call(defaults, prop))
 		{
 			continue;
 		}
@@ -80,8 +80,9 @@ export class Model extends Data
 	 */
 	constructor(settings)
 	{
-		super(settings);
+		const proxy = super(settings);
 		this.initialize();
+		return proxy;
 	}
 
 	/**

@@ -2,6 +2,12 @@ import { base } from '../../main/base.js';
 import { Jot } from "../component/jot.js";
 import { Parser } from './element/parser.js';
 import { HtmlHelper } from './html-helper.js';
+import { RenderController } from './render/render-controller.js';
+
+/**
+ * This will set up the render engine.
+ */
+const render = RenderController.setup();
 
 /**
  * Builder
@@ -18,7 +24,7 @@ export class Builder
 	 * @param {object|function} layout
 	 * @param {object} container
 	 * @param {object} [parent]
-	 * @returns {object} The layout Unit or Component
+	 * @returns {object|null} The layout Unit, Component, or null.
 	 */
 	static render(layout, container, parent)
 	{
@@ -27,6 +33,7 @@ export class Builder
 			return;
 		}
 
+		let component, jot;
 		switch (typeof layout)
 		{
 			case 'object':
@@ -35,9 +42,14 @@ export class Builder
 					this.createComponent(layout, container, parent);
 					return layout;
 				}
+				/* falls through */
 			default:
-				const component = Jot(layout);
-				const jot = new component();
+				/**
+				 * This will convert the object to a component
+				 * and render it.
+				 */
+				component = Jot(layout);
+				jot = new component();
 				this.createComponent(jot, container, parent);
 				return jot;
 		}
@@ -127,17 +139,7 @@ export class Builder
 		const settings = Parser.parse(obj, parent),
 		ele = this.createNode(settings, container, parent);
 
-		const propName = obj.cache;
-		if (parent && propName)
-		{
-			parent[propName] = ele;
-		}
-
-		const directives = settings.directives;
-		if (directives && directives.length)
-		{
-			this.setDirectives(ele, directives, parent);
-		}
+		this.cache(ele, obj.cache, parent);
 
 		/* we want to recursively add the children to
 		the new element */
@@ -155,6 +157,12 @@ export class Builder
 
 				this.buildElement(child, ele, parent);
 			}
+		}
+
+		const directives = settings.directives;
+		if (directives && directives.length)
+		{
+			this.setDirectives(ele, directives, parent);
 		}
 	}
 
@@ -190,25 +198,13 @@ export class Builder
 	}
 
 	/**
-	 * This will be called when an element onCreated directive is called.
-	 *
-	 * @param {object} ele
-	 * @param {function} callBack
-	 * @param {object} parent
-	 */
-	onCreated(ele, callBack, parent)
-	{
-		callBack(ele);
-	}
-
-	/**
 	 * This will cache an element ot the parent.
 	 *
 	 * @param {object} ele
 	 * @param {object} propName
 	 * @param {object} parent
 	 */
-	cache(ele, propName, parent)
+	static cache(ele, propName, parent)
 	{
 		if (parent && propName)
 		{
@@ -267,21 +263,7 @@ export class Builder
 	 */
 	static createNode(settings, container, parent)
 	{
-		const tag = settings.tag;
-		if (tag === 'text')
-		{
-			const child = settings.attr[0];
-			const text = (child)? child.value : '';
-			return HtmlHelper.createText(text, container);
-		}
-		else if (tag === 'comment')
-		{
-			const attr = settings.attr;
-			const text = attr.text;
-			return HtmlHelper.createComment(text, container);
-		}
-
-		return HtmlHelper.create(tag, settings.attr, container, parent);
+		return render.createNode(settings, container, parent);
 	}
 }
 
