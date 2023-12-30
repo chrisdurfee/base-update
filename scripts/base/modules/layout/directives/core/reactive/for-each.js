@@ -1,5 +1,6 @@
 import { dataBinder } from "../../../../data-binder/data-binder.js";
 import { Html } from "../../../../html/html.js";
+import { Builder } from "../../../builder.js";
 import { getParentData } from './get-parent-data.js';
 
 /**
@@ -45,18 +46,18 @@ export const forEach = (ele, settings, parent) =>
         }
 
         const children = [];
-        for (var i = 0, length = items.length; i < length; i++)
+        items.forEach((item, index) =>
         {
-            var scoped = (scopeData)? data.scope(prop + '[' + i + ']') : null;
-            var layout = item(items[i], i, scoped);
+            const scoped = (scopeData)? data.scope(prop + '[' + index + ']') : null;
+            const layout = item(items[index], index, scoped);
             if (layout === null)
             {
-                continue;
+                return;
             }
 
             children.push(layout);
-        }
+        });
 
-        return this.build(children, ele, parent);
+        return Builder.build(children, ele, parent);
     });
 }

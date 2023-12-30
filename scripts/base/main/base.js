@@ -1,6 +1,6 @@
 /**
  * Base Framework
- * @version 3.0.0
+ * @version 3.0.6
  * @author Chris Durfee
  * @file This is a javascript framework to allow complex
  * functions to work in many browsers and versions.
@@ -30,7 +30,7 @@ class Base
 		/**
 		 * @member {string} version
 		 */
-		this.version = '3.0.0';
+		this.version = '3.0.6';
 
 		/**
 		 * @member {array} errors
@@ -51,19 +51,15 @@ class Base
 	 */
 	augment(methods)
 	{
-		if (!methods || typeof methods !== 'object')
+		if (!Types.isObject(methods))
 		{
 			return this;
 		}
 
-		const prototype = this.constructor.prototype;
-		for (var property in methods)
+		Object.entries(methods).forEach(([property, method]) =>
 		{
-			if (Object.prototype.hasOwnProperty.call(methods, property))
-			{
-				prototype[property] = methods[property];
-			}
-		}
+            this.constructor.prototype[property] = method;
+        });
 		return this;
 	}
 
@@ -141,15 +137,14 @@ class Base
 	 *
 	 * @return {(function|boolean)} The callBack function or false.
 	 */
-	createCallBack(obj, method, argArray, addArgs)
+	createCallBack(obj, method, argArray = [], addArgs = false)
 	{
 		if (typeof method !== 'function')
 		{
 			return false;
 		}
 
-		argArray = argArray || [];
-		return function(...args)
+		return (...args) =>
 		{
 			if (addArgs === true)
 			{
