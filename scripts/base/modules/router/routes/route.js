@@ -22,6 +22,20 @@ let routeCount = 0;
 export class Route extends SimpleData
 {
 	/**
+	 * This will set up the prpoerties before the constructor
+	 * to allow the proxy to work.
+	 */
+	uriQuery = null;
+	controller = null;
+	paramKeys = null;
+	titleCallBack = null;
+	path = null;
+	referralPath = null;
+	params = null;
+	callBack = null;
+	title = null;
+
+	/**
 	 * This will create a route.
 	 *
 	 * @constructor
@@ -257,6 +271,7 @@ export class Route extends SimpleData
 		 * We want to check to use the supplied uri or get the
 		 * current uri if not setup.
 		 */
+		console.log(path, this.uriQuery)
 		const result = path.match(this.uriQuery);
 		if (result === null)
 		{

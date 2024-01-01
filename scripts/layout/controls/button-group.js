@@ -13,7 +13,11 @@ const Buttons = Atom((props, children) =>
 const StateButton = Atom((props, children) =>
 {
 	return Button({
-		click: (e, {state}) => state.set('performance', props.value),
+		click: (e, {state}) =>
+		{
+			//state.set('performance', props.value);
+			state.performance = props.value;
+		},
 	}, props.label);
 });
 
