@@ -6,17 +6,12 @@ import { Types } from "../../shared/types.js";
  *
  * @param {string} path
  * @param {string} prop
- * @returns {string}
+ * @return {string}
  */
 function getNewPath(path, prop)
 {
-    const propPath = (isNaN(Number(prop)))? prop : `[${prop}]`;
-	if (path === '')
-    {
-        return propPath;
-    }
-
-	return `${path}.${propPath}`;
+    const propPath = isNaN(Number(prop)) ? prop : `[${prop}]`;
+    return path === '' ? propPath : `${path}.${propPath}`;
 }
 
 /**
@@ -25,7 +20,7 @@ function getNewPath(path, prop)
  * @param {object} data
  * @param {string} path
  * @param {string} root
- * @returns {Proxy}
+ * @return {object}
  */
 function createHandler(data, path = '', dataRoot = '')
 {
@@ -37,7 +32,7 @@ function createHandler(data, path = '', dataRoot = '')
          * @param {object} target
          * @param {string} prop
          * @param {object} receiver
-         * @returns {mixed}
+         * @return {mixed}
          */
         get(target, prop, receiver)
         {
@@ -95,6 +90,6 @@ function createHandler(data, path = '', dataRoot = '')
  * This will create a data proxy.
  *
  * @param {object} data
- * @returns {Proxy}
+ * @return {Proxy}
  */
 export const DataProxy = (data, root = 'stage') => new Proxy(data, createHandler(data, '', root));

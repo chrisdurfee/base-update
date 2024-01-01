@@ -271,7 +271,6 @@ export class Route extends SimpleData
 		 * We want to check to use the supplied uri or get the
 		 * current uri if not setup.
 		 */
-		console.log(path, this.uriQuery)
 		const result = path.match(this.uriQuery);
 		if (result === null)
 		{
