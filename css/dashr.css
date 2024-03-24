@@ -1,5 +1,12 @@
-@import url('loading.css');
-@import url('animation.css');
 @import url('base.css');
-@import url('import-files.css');
+
+@import url('text/text.css');
+@import url('colors/color.css');
+
+/* controls */
+@import url('controls/navigation.css');
+@import url('controls/tab.css');
+
+/* modules */
+@import url('modules/main-panel.css');
 @import url('animation.css');

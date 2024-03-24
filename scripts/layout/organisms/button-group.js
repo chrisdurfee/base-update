@@ -48,7 +48,7 @@ const ButtonText =
  * @class
  * @extends Component
  */
-export default class ButtonGroup extends Component
+export class ButtonGroup extends Component
 {
     /**
      * This will render the component.

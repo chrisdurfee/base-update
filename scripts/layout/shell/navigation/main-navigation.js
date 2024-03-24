@@ -1,6 +1,6 @@
 import { A, Div } from "@base-framework/atoms";
 import { Atom, Component } from "@base-framework/base";
-import { PrimaryNavigation } from "../../components/organisms/navigation/primary-navigation.js";
+import { PrimaryNavigation } from "../../organisms/navigation/primary-navigation.js";
 
 /**
  * This will create the main navigation.
