@@ -1,118 +1,80 @@
-import { MainController } from './main-controller.js';
-import { CastPanel } from './modules/cast-panel.js';
-import { HomePanel } from './modules/home-panel.js';
-import { SynopsisPanel } from './modules/synopsis-panel.js';
-
-/**
- * This will create a route object.
- * @param {string} uri
- * @param {function} component
- * @param {string} [title]
- */
-const addRoute = (uri, component, title) =>
-{
-	return {
-		uri,
-		component,
-		title,
-		persist: true
-	};
-};
+import { base, Builder } from "@base-framework/base";
+import { Configs } from "./configs.js";
+import { AppShell } from "./shell/app-shell.js";
 
 /**
  * AppController
  *
- * This will extend the main class to override
- * the app settings.
+ * This will setup the main app controller.
+ *
  * @class
  */
-export class AppController extends MainController
+export class AppController
 {
 	/**
-	 * This will get the router settings.
+	 * @member {object} router
+	 */
+	router = null;
+
+	/**
+	 * @member {object} appShell
+	 */
+	appShell = null;
+
+	/**
+	 * This will setup the main controller.
+	 */
+	constructor()
+	{
+		this.setupRouter();
+		this.setupAppShell();
+	}
+
+	/**
+	 * This will setup the router.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	setupRouter()
+	{
+		const { baseUrl, title } = Configs.router;
+		const router = this.router = base.router;
+		router.setup(baseUrl, title);
+	}
+
+	/**
+	 * This will navigate to the uri.
+	 *
+	 * @param {string} uri
+	 * @param {object} [data]
+	 * @param {boolean} [replace=false]
+	 * @return {void}
+	 */
+	navigate(uri, data, replace)
+	{
+		this.router.navigate(uri, data, replace);
+	}
+
+	/**
+	 * This will setup the app shell.
+	 *
+	 * @protected
+	 * @return {void}
+	 */
+	setupAppShell()
+	{
+		const main = this.appShell = new AppShell();
+		Builder.render(main, document.body);
+	}
+
+	/**
+	 * This will get the main body element.
+	 *
 	 * @return {object}
 	 */
-	getRouterSettings()
+	getMainBody()
 	{
-		return {
-			baseUrl: '/base-update/',
-			title: 'Dashr'
-		};
-	}
-
-	/**
-	 * This will get the routes that will be used in
-	 * the app shell.
-	 *
-	 * @return {array}
-	 */
-	getRoutes()
-	{
-		return [
-			addRoute('/', new HomePanel(), 'Example'),
-			addRoute('/synopsis/:page?*', new SynopsisPanel(), 'Synopsis'),
-			addRoute('/cast', new CastPanel(), 'Cast')
-		];
-	}
-
-	/**
-	 * This will get the options to create the app
-	 * navigation.
-	 *
-	 * @return {array}
-	 */
-	getNavOptions()
-	{
-		return [
-			{
-				label: 'EXPLORE',
-				href: './'
-			},
-			{
-				label: 'SYNOPSIS',
-				href: 'synopsis',
-				options:
-				[
-					{
-						label: 'STORY',
-						href: 'synopsis/story'
-					},
-					{
-						label: 'BOOK',
-						href: 'synopsis/book'
-					},
-					{
-						label: 'CONCEPTS',
-						href: 'synopsis/concepts'
-					}
-				]
-			},
-			{
-				label: 'CAST',
-				href: 'cast'
-			},
-			{
-				label: 'GALLERY',
-				href: 'gallery'
-			},
-			{
-				group: 'Mail',
-				options:
-				[
-					{
-						label: 'INBOX',
-						href: './mail/inbox'
-					},
-					{
-						label: 'SENT',
-						href: './mail/sent'
-					},
-					{
-						label: 'SPAM',
-						href: './mail/spam'
-					}
-				]
-			}
-		];
+		return this.appShell.getBodyPanel();
 	}
 }

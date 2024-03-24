@@ -8,7 +8,6 @@
 		<meta name="keywords" content="">
 		<title>script example</title>
 		<link rel="stylesheet" type="text/css" href="./css/dashr.css">
-		<link rel="stylesheet" type="text/css" href="./css/animation.css">
 		<base href="./">
 
 		<!-- pwa settings -->
@@ -28,12 +27,11 @@
 	<body id="body">
 
 		<script type="module">
-			import {AppController} from './scripts/layout/app-controller.js';
+			import { AppController } from './scripts/layout/app-controller.js';
 
 			/* this will store the app object that will be used
 			to controll the app and user interface */
-			var app = new AppController();
-			app.setup();
+			const app = new AppController();
 
 		</script>
 	</body>
