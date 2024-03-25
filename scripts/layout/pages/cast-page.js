@@ -1,19 +1,16 @@
-import { Div, Section } from '@base-framework/atoms';
-import { MainSection, MainTitle } from '../atoms/atoms.js';
+import { Div } from '@base-framework/atoms';
 import { Page } from './page.js';
 
-export class CastPage extends Page
-{
-	render()
-	{
-		return MainSection({ class: 'cast-page page'}, [
-			MainTitle('Cast'),
-			Section({ class: 'body' }, [
-				Div({ class: 'row' }, [
-					{ class: 'col'},
-					{ class: 'col'}
-				])
-			])
-		]);
-	}
-}
+/**
+ * CastPage
+ *
+ * This will create the cast page.
+ */
+export const CastPage = (props) => (
+	new Page({ title: 'Cast' }, [
+		Div({ class: 'row' }, [
+			{ class: 'col'},
+			{ class: 'col'}
+		])
+	])
+);

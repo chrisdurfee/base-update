@@ -1,6 +1,6 @@
 import { Atom, Component } from '@base-framework/base';
 import { CastPage } from '../pages/cast-page.js';
-import { HomePage } from '../pages/home-page.js';
+import { HomePage } from '../pages/home/home-page.js';
 import { SynopsisPage } from '../pages/synopsis-page.js';
 import { AppControl } from './navigation/app-control.js';
 
@@ -125,7 +125,7 @@ const getNavOptions = () => [
 const getRoutes = () => [
 	addRoute('/', new HomePage(), 'Example'),
 	addRoute('/synopsis/:page?*', new SynopsisPage(), 'Synopsis'),
-	addRoute('/cast', new CastPage(), 'Cast')
+	addRoute('/cast', CastPage(), 'Cast')
 ];
 
 /**
