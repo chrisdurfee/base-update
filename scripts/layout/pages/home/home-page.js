@@ -66,17 +66,15 @@ export class HomePage extends Page
 						class: 'col',
 						onState: ['loaded', (val) =>
 						{
+							const props = { loadedCallBack: () => this.toggleLoaded() };
+
 							if (val === false)
 							{
-								return LoadingCard({
-									loadedCallBack: () => this.toggleLoaded()
-								});
+								return LoadingCard(props);
 							}
 
 							return Div({ class: 'container [[firstName]]' }, [
-								SectionCards({
-									loadedCallBack: () => this.toggleLoaded(),
-								})
+								SectionCards(props)
 							]);
 						}]
 					})
