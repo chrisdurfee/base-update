@@ -1,6 +1,6 @@
-import { Div, H5, Section } from '@base-framework/atoms';
+import { Div, H5 } from '@base-framework/atoms';
 import { Atom, Data } from '@base-framework/base';
-import { Button, MainSection, MainTitle } from '../../atoms/atoms.js';
+import { Button } from '../../atoms/atoms.js';
 import { Card } from '../../organisms/organisms.js';
 import { Page } from '../page.js';
 import { SectionCards } from './cards.js';
@@ -39,67 +39,41 @@ const LoadingCard = Atom((props) =>
 });
 
 /**
- * HomePage
+ * This will create the page data.
  *
- * This will create a home page.
- *
- * @class
+ * @returns {object}
  */
-export class HomePage extends Page
-{
-	onCreated()
-	{
-		this.data = new Data({
-			firstName: 'Bruce',
-			lastName: 'W'
-		});
-	}
+const data = () => (new Data({
+	firstName: 'Bruce',
+	lastName: 'W'
+}));
 
-	render()
-	{
-		return MainSection({ class: 'home-page page', onState: ['loaded', { loaded: true }]}, [
-			MainTitle('Title'),
-			Section({ class: 'body' }, [
-				Row([
-					{ class: 'col'},
-					Div({
-						class: 'col',
-						onState: ['loaded', (val) =>
-						{
-							const props = { loadedCallBack: () => this.toggleLoaded() };
+/**
+ * This will create the home page.
+ *
+ * @param {object} props
+ * @returns {object}
+ */
+export const HomePage = (props) => (
+	new Page({ mainClass: 'home-page', title: 'Title', data: data()}, [
+		Div({ class: 'row' }, [
+			Div({ class: 'col'}),
+			Div({
+				class: 'col',
+				onState: ['loaded', (val, ele, parent) =>
+				{
+					const props = { loadedCallBack: () => parent.state.toggle('loaded') };
 
-							if (val === false)
-							{
-								return LoadingCard(props);
-							}
+					if (val === false)
+					{
+						return LoadingCard(props);
+					}
 
-							return Div({ class: 'container [[firstName]]' }, [
-								SectionCards(props)
-							]);
-						}]
-					})
-				])
-			])
-		]);
-	}
-
-	setupStates()
-	{
-		return {
-			loaded: true
-		};
-	}
-
-	toggleLoaded()
-	{
-		this.state.toggle('loaded');
-	}
-
-	updateName()
-	{
-		this.data.set({
-			firstName: 'Jeff',
-			lastName: 'Bezos'
-		});
-	}
-}
+					return Div({ class: 'container [[firstName]]' }, [
+						SectionCards(props)
+					]);
+				}]
+			})
+		])
+	])
+);

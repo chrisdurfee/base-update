@@ -80,7 +80,7 @@ export const SectionCards = Atom((props) =>
 		]),
 		Group({ title: 'Actions' }, [
 			Row([
-				Button({ click: (e, parent) => parent.updateName() }, 'Change Name')
+				Button({ click: (e, { data }) => data.set({ firstName: 'Jeff', lastName: 'Bezos' }) }, 'Change Name')
 			]),
 			Row([
 				Button({ click: () => props.loadedCallBack() }, 'Change Loaded')

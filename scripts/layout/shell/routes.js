@@ -10,7 +10,7 @@ import { SynopsisPage } from '../pages/synopsis-page.js';
  * @param {string} [title]
  * @return {object}
  */
-const addRoute = (uri, component, title) =>
+const Route = (uri, component, title) =>
 {
 	return {
 		uri,
@@ -26,7 +26,7 @@ const addRoute = (uri, component, title) =>
  * @return {array}
  */
 export const Routes = () => [
-	addRoute('/', new HomePage(), 'Example'),
-	addRoute('/synopsis/:page?*', new SynopsisPage(), 'Synopsis'),
-	addRoute('/cast', CastPage(), 'Cast')
+	Route('/', HomePage(), 'Example'),
+	Route('/synopsis/:page?*', SynopsisPage(), 'Synopsis'),
+	Route('/cast', CastPage(), 'Cast')
 ];

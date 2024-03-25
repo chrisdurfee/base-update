@@ -20,9 +20,31 @@ export class Page extends Component
 	render()
 	{
 		return MainSection({ class: `${this.mainClass} page`}, [
-			MainTitle(this.title),
+			MainTitle(this.getTitle()),
 			Section({ class: 'body' }, this.children)
 		]);
+	}
+
+	/**
+	 * This will setup the states.
+	 *
+	 * @return {object}
+	 */
+	setupStates()
+	{
+		return {
+			loaded: true
+		};
+	}
+
+	/**
+	 * This will add a title.
+	 *
+	 * @returns {string}
+	 */
+	getTitle()
+	{
+		return this.title;
 	}
 
 	/**
