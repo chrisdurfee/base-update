@@ -1,6 +1,8 @@
+import { H5 } from '@base-framework/atoms';
 import { Atom, Data, Model } from '@base-framework/base';
 import { A, Button, H2, Input, Label, MainSection, MainTitle, P } from '../atoms/atoms.js';
 import { ButtonGroup } from '../organisms/button-group.js';
+import { Card } from '../organisms/organisms.js';
 import { Page } from './page.js';
 
 /**
@@ -109,76 +111,59 @@ export class HomePage extends Page
 								{
 									class: 'col',
 									nest: [
-										new ButtonGroup(),
 										{
 											class: 'container [[firstName]]',
 											nest: [
-												Row([
-													H2('[[firstName]] [[lastName]] is so cool.')
+												Card([
+													H5('Property Watching'),
+													Row([
+														H2('[[firstName]] [[lastName]] is so cool.')
+													])
 												]),
-												Row([
-													Label({
-														text: 'First Name'
-													}),
-													Input({
-														bind: 'firstName'
-													})
+												Card([
+													H5('Property Bindnig'),
+													Row([
+														Label('First Name'),
+														Input({ bind: 'firstName' })
+													]),
+													Row([
+														Label('Last Name'),
+														Input({ bind: 'lastName' })
+													])
 												]),
-												Row([
-													Label({
-														text: 'Last Name'
-													}),
-													Input({
-														bind: 'lastName'
-													})
+												Card([
+													H5('State Component'),
+													new ButtonGroup()
 												]),
-												Row([
-													A({
-														bind: ['href:firstName', 'https://google.com/[[value]]'],
-														target: '_blank',
-														watch: 'Search [[firstName]] [[lastName]]'
-													}),
-													A({href: 'https://google.com/[[firstName]]', target: '_blank'}, '[[firstName]] and [[lastName]]')
+												Card([
+													H5('Multi Property Watching'),
+													Row([
+														// new way
+														A({href: 'https://google.com/[[firstName]]+[[lastName]]', target: '_blank'}, 'Saerch for: [[firstName]] [[lastName]] on Google')
+													]),
+													Row([
+														// text watching
+														P('I like the last name: [[lastName]] and the first name: [[firstName]]')
+													])
 												]),
-												Row([
-													P({
-														bind: ['lastName', (value) =>
-														{
-															return ' I like the last name: ' + value;
-														}]
-													}),
-													P('I like the last name: [[lastName]] [[firstName]]')
+												Card([
+													H5('Filter Property Watching'),
+													Row([
+														// bind
+														P({ bind: ['lastName', (value) => ' I like the last name: ' + value] })
+													]),
 												]),
-												Row([
-													Button({
-														text: 'Change Name',
-														click: () =>
-														{
-															this.updateName();
-														}
-													})
-												]),
-												Row([
-													Button({
-														text: 'Change Loaded',
-														click: () =>
-														{
-															this.toggleLoaded();
-														}
-													})
-												]),
-												Row([
-													Button({
-														text: 'Call Service',
-														click: () =>
-														{
-															console.log(this.testModel)
-															this.testModel.xhr.add('', (response) =>
-															{
-																console.log(response);
-															});
-														}
-													})
+												Card([
+													H5('Actions'),
+													Row([
+														Button({ click: () => this.updateName() }, 'Change Name')
+													]),
+													Row([
+														Button({ click: () => this.toggleLoaded() }, 'Change Loaded')
+													]),
+													Row([
+														Button({ click: () => this.testModel.xhr.add('', (response) => console.log(response))}, 'Call Service')
+													])
 												])
 											]
 										}
@@ -209,17 +194,6 @@ export class HomePage extends Page
 		this.data.set({
 			firstName: 'Jeff',
 			lastName: 'Bezos'
-		});
-	}
-
-	addButton(label, value)
-	{
-		return Button({
-			text: label,
-			click: () =>
-			{
-				this.state.set('performance', value)
-			}
 		});
 	}
 }
