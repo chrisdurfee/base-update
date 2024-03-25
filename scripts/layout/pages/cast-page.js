@@ -6,7 +6,7 @@ export class CastPage extends Page
 {
 	render()
 	{
-		return MainSection({ class: 'cast-panel'}, [
+		return MainSection({ class: 'cast-page page'}, [
 			MainTitle('Cast'),
 			Section({ class: 'body' }, [
 				Div({ class: 'row' }, [

@@ -62,11 +62,12 @@ const ActivePanelContainer = Atom((props, children) =>
 const getNavOptions = () => [
 	{
 		label: 'EXPLORE',
-		href: './'
+		href: './',
+		icon: 'blank'
 	},
 	{
 		label: 'SYNOPSIS',
-		href: 'synopsis',
+		icon: 'blank',
 		options:
 		[
 			{
@@ -85,11 +86,13 @@ const getNavOptions = () => [
 	},
 	{
 		label: 'CAST',
-		href: 'cast'
+		href: 'cast',
+		icon: 'blank'
 	},
 	{
 		label: 'GALLERY',
-		href: 'gallery'
+		href: 'gallery',
+		icon: 'blank'
 	},
 	{
 		group: 'Mail',
@@ -97,15 +100,18 @@ const getNavOptions = () => [
 		[
 			{
 				label: 'INBOX',
-				href: './mail/inbox'
+				href: 'mail/inbox',
+				icon: 'blank'
 			},
 			{
 				label: 'SENT',
-				href: './mail/sent'
+				href: 'mail/sent',
+				icon: 'blank'
 			},
 			{
 				label: 'SPAM',
-				href: './mail/spam'
+				href: 'mail/spam',
+				icon: 'blank'
 			}
 		]
 	}

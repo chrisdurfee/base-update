@@ -24,7 +24,7 @@ export class SynopsisPage extends Page
 
 		return MainSection(
             {
-                class: 'synopsis-panel'
+                class: 'synopsis-page page'
             },
             [
                 MainTitle(['Synopsis [[page]]', route]),

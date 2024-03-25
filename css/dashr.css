@@ -2,11 +2,19 @@
 
 @import url('text/text.css');
 @import url('colors/color.css');
+@import url('layout.css');
 
-/* controls */
-@import url('controls/navigation.css');
-@import url('controls/tab.css');
+/* atoms */
+@import url('components/atoms/atoms.css');
 
-/* modules */
-@import url('modules/main-panel.css');
+/* molecules */
+@import url('components/molecules/molecules.css');
+
+/* organisms */
+@import url('components/organisms/navigation.css');
+@import url('components/organisms/tab.css');
+@import url('components/organisms/list.css');
+
+/* pages */
+@import url('pages/page.css');
 @import url('animation.css');

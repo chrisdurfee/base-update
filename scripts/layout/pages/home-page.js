@@ -75,7 +75,7 @@ export class HomePage extends Page
 	{
 		return MainSection(
 		{
-			class: 'home-panel',
+			class: 'home-page page',
 			onState: [
 				['loaded', {
 					loaded: true
