@@ -73,13 +73,11 @@ export class HomePage extends Page
 								});
 							}
 
-							return [
-								Div({ class: 'container [[firstName]]' }, [
-									SectionCards({
-										loadedCallBack: () => this.toggleLoaded(),
-									})
-								])
-							]
+							return Div({ class: 'container [[firstName]]' }, [
+								SectionCards({
+									loadedCallBack: () => this.toggleLoaded(),
+								})
+							]);
 						}]
 					})
 				])
