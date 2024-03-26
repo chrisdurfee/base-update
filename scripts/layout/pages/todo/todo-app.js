@@ -117,35 +117,11 @@ export const Pod = (callBack) =>
     return component;
 };
 
-export const PodToDoApp = Pod((self) =>
+export const ToDoApp = Pod((self) =>
 {
-	self.created = () =>
-    {
-        console.log('created');
-	};
+	self.setData = () => new Data({ items: [] });
 
-    self.setData = () => new Data({ items: [] });
-
-	self.setStates = () => ({
-		loaded: true
-	});
-
-	self.before = () =>
-	{
-		console.log('before');
-	};
-
-	self.after = () =>
-	{
-		console.log('after');
-	};
-
-	self.destroy = () =>
-	{
-		console.log('destroy');
-	};
-
-    // handle form submission
+	// handle form submission
     const handleSubmit = (event, { data }) =>
     {
         event.preventDefault();
