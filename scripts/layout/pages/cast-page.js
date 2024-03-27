@@ -1,6 +1,6 @@
 import { Div } from '@base-framework/atoms';
 import { Page } from './page.js';
-import { PodToDoApp } from './todo/todo-app.js';
+import { ToDoApp } from './todo/todo-app.js';
 
 /**
  * CastPage
@@ -15,7 +15,7 @@ export const CastPage = (props) => (
 		Div({ class: 'row' }, [
 			Div({ class: 'col'}),
 			Div({ class: 'col'}, [
-				new PodToDoApp()
+				new ToDoApp()
 			])
 		])
 	])
