@@ -1,4 +1,4 @@
-importScripts('./scripts/worker/cache-controller.js', './scripts/worker/service.js');
+importScripts('./src/worker/cache-controller.js', './src/worker/service.js');
 
 const appName = 'app-name',
 version = 1.0;
