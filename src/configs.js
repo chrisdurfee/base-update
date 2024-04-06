@@ -12,7 +12,7 @@ export const Configs =
 
 	router:
 	{
-		baseUrl: '/',
+		baseUrl: '/base-update/',
 		title: 'Example'
 	}
 };
