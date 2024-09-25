@@ -35,8 +35,8 @@ export const Links = () => [
 		icon: 'blank'
 	},
 	{
-		label: 'GALLERY',
-		href: 'gallery',
+		label: 'List',
+		href: 'list',
 		icon: 'blank'
 	},
 	{

@@ -1,5 +1,6 @@
 import { CastPage } from '../pages/cast-page.js';
 import { HomePage } from '../pages/home/home-page.js';
+import { ListPage } from '../pages/list/list-page.js';
 import { SynopsisPage } from '../pages/synopsis/synopsis-page.js';
 
 /**
@@ -28,5 +29,6 @@ const Route = (uri, component, title) =>
 export const Routes = () => [
 	Route('/', HomePage(), 'Example'),
 	Route('/synopsis/:page?*', SynopsisPage(), 'Synopsis'),
-	Route('/cast', CastPage(), 'Cast')
+	Route('/cast', CastPage(), 'Cast'),
+	Route('/list', ListPage(), 'Cast'),
 ];
