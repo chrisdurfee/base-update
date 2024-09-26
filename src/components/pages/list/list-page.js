@@ -34,6 +34,7 @@ const Item = (item) => Div({ class: 'item flex' }, [
  */
 const ItemList = () => new List({
     cache: 'list',
+    key: 'name',
     items: Items,
     rowItem: Item
 });
@@ -81,9 +82,18 @@ export const ListPage = (props) => (
 			Div({ class: 'col'}, [
                 Group({ title: 'Actions' }, [
                     Row([
-                        Button({ click: (e, parent) => parent.list.prepend(Items) }, 'Prepend'),
-                        Button({ click: (e, parent) => parent.list.append(Items) }, 'Append'),
-                        Button({ click: (e, parent) => parent.list.mingle(Items) }, 'Mingle'),
+                        Button({ click: (e, parent) => parent.list.prepend([
+                            { name: 'Prepend 1', description: 'This is prepend 1.' },
+                            { name: 'Prepend 2', description: 'This is prepend 2.' }
+                        ]) }, 'Prepend'),
+                        Button({ click: (e, parent) => parent.list.append([
+                            { name: 'Append 1', description: 'This is append 1.' },
+                            { name: 'Append 2', description: 'This is append 2.' }
+                        ]) }, 'Append'),
+                        Button({ click: (e, parent) => parent.list.mingle([
+                            { name: 'Mingle 1', description: 'This is mingle 1.' },
+                            { name: 'Mingle 2', description: 'This is mingle 2.' }
+                        ]) }, 'Mingle'),
                     ])
                 ]),
 				ItemList()
