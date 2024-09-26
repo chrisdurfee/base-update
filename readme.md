@@ -4,7 +4,7 @@
 
 This is an example app for the Base Framework. It is a simple, single page application that demonstrates the framework's capabilities. The app is a good starting point for creating your own application.
 
-Here is the link to the example app: [Next App Shell](https://chrisdurfee.github.io/base-update/)
+Here is the link to the example app: [App Example](https://chrisdurfee.github.io/base-update/)
 
 ## Layouts
 
