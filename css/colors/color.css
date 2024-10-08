@@ -209,11 +209,6 @@ select.filled,
 textarea.filled {
     background-color: var(--base-input);
 }
-input:hover,
-select:hover,
-textarea:hover {
-    background-color: transparent;
-}
 input.filled:hover,
 select.filled:hover,
 textarea.filled:hover {
@@ -239,11 +234,6 @@ input.filled:focus:invalid {
     box-shadow: inset 0px -1px 0px #F56166;
 }
 
-.floating input,
-.floating select,
-.floating textarea {
-    background-color: transparent;
-}
 .floating input:hover:not(:focus),
 .floating select:hover:not(:focus),
 .floating textarea:hover:not(:focus) {
