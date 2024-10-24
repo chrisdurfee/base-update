@@ -1,6 +1,7 @@
 import { H5 } from '@base-framework/atoms';
 import { Atom } from '@base-framework/base';
-import { A, Button, H2, Input, Label, P } from '../../atoms/atoms.js';
+import { A, Label as BaseLabel, H2, Input, P } from '../../atoms/atoms.js';
+import { Button } from "../../atoms/buttons/buttons.js";
 import { ButtonGroup } from '../../organisms/button-group.js';
 import { Card } from '../../organisms/organisms.js';
 import { TestModel } from './data/test-model.js';
@@ -21,6 +22,15 @@ const Row = Atom((props, children) =>
 });
 
 /**
+ * This will create a label.
+ *
+ * @param {object} props
+ * @param {string} children
+ * @return {object}
+ */
+const Label = Atom((props, children) => BaseLabel({ class: 'text-sm text-muted-foreground font-medium pr-8', ...props }, children));
+
+/**
  * This will create a group.
  *
  * @param {object} props
@@ -28,7 +38,7 @@ const Row = Atom((props, children) =>
  */
 const Group = Atom((props, children) => (
 	Card([
-		H5(props.title),
+		H5({ class: 'flex flex-auto text-2xl font-bold tracking-tight mb-2' }, props.title),
 		...children
 	])
 ));
@@ -49,7 +59,7 @@ export const SectionCards = Atom((props) =>
 				H2('[[firstName]] [[lastName]] is so cool.')
 			])
 		]),
-		Group({ title: 'Property Bindnig' }, [
+		Group({ title: 'Property Binding' }, [
 			Row([
 				Label('First Name'),
 				Input({ bind: 'firstName' })
@@ -65,7 +75,7 @@ export const SectionCards = Atom((props) =>
 		Group({ title: 'Multi Property Watching' }, [
 			Row([
 				// new way
-				A({href: 'https://google.com/[[firstName]]+[[lastName]]', target: '_blank'}, 'Saerch for: [[firstName]] [[lastName]] on Google')
+				A({ class: 'text-sm text-muted-foreground font-medium pr-8', href: 'https://google.com/[[firstName]]+[[lastName]]', target: '_blank'}, 'Saerch for: [[firstName]] [[lastName]] on Google')
 			]),
 			Row([
 				// text watching
@@ -75,7 +85,7 @@ export const SectionCards = Atom((props) =>
 		Group({ title: 'Filter Property Watching' }, [
 			Row([
 				// bind
-				P({ bind: ['lastName', (value) => ' I like the last name: ' + value] })
+				P({ class: 'text-sm text-muted-foreground font-medium pr-8', bind: ['lastName', (value) => ' I like the last name: ' + value] })
 			]),
 		]),
 		Group({ title: 'Actions' }, [
