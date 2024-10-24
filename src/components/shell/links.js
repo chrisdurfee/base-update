@@ -7,9 +7,9 @@ import { Icons } from '../../components/icons/icons.js';
  */
 export const Links = () => [
 	{ label: 'Home', href: './', icon: Icons.home, mobileOrder: 1, exact: true },
-    { label: 'Messages', href: 'aside', icon: Icons.chat.text, mobileOrder: 2 },
-    { label: 'Calendar', href: 'bside', icon: Icons.calendar.default, mobileOrder: 3 },
-    { label: 'Reviews', href: 'aside-bside', icon: Icons.star, mobileOrder: 4 },
+    { label: 'Synopsis', href: 'synopsis', icon: Icons.chat.text, mobileOrder: 2 },
+    { label: 'Cast', href: 'cast', icon: Icons.calendar.default, mobileOrder: 3 },
+    { label: 'List', href: 'list', icon: Icons.star, mobileOrder: 4 },
     { label: 'Map', href: 'full', icon: Icons.map },
     { label: 'Help', href: 'full-contain', icon: Icons.help },
     { label: 'Music', href: 'messages', icon: Icons.music },
@@ -41,7 +41,6 @@ export const Links = () => [
             }
         ]
     },
-    { label: 'Archive', href: 'cast', icon: Icons.newspaper },
     {
         label: 'Settings',
         icon: Icons.adjustments.veritical,
