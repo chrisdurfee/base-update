@@ -1,6 +1,6 @@
 import { Div, H5 } from '@base-framework/atoms';
 import { Atom, Data } from '@base-framework/base';
-import { Button } from '../../atoms/atoms.js';
+import { Button } from '../../atoms/buttons/buttons.js';
 import { Card } from '../../organisms/organisms.js';
 import { Page } from '../page.js';
 import { SectionCards } from './cards.js';
@@ -31,7 +31,7 @@ const Row = Atom((props, children) =>
 const LoadingCard = Atom((props) =>
 {
 	return Card([
-		H5('Loading...'),
+		H5({ class: 'm-2', }, 'Loading...'),
 		Row([
 			Button({ click: () => props.loadedCallBack() }, 'Change Loaded')
 		])

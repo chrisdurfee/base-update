@@ -15,7 +15,7 @@ import { TestModel } from './data/test-model.js';
 const Row = Atom((props, children) =>
 {
 	return {
-		class: 'row',
+		class: 'row gap-2',
 		...props,
 		children
 	};
@@ -90,12 +90,8 @@ export const SectionCards = Atom((props) =>
 		]),
 		Group({ title: 'Actions' }, [
 			Row([
-				Button({ click: (e, { data }) => data.set({ firstName: 'Jeff', lastName: 'Bezos' }) }, 'Change Name')
-			]),
-			Row([
-				Button({ click: () => props.loadedCallBack() }, 'Change Loaded')
-			]),
-			Row([
+				Button({ click: (e, { data }) => data.set({ firstName: 'Jeff', lastName: 'Bezos' }) }, 'Change Name'),
+				Button({ click: () => props.loadedCallBack() }, 'Change Loaded'),
 				Button({
 					click: () =>
 					{
@@ -104,7 +100,7 @@ export const SectionCards = Atom((props) =>
 					}
 				}, 'Call Service'
 				)
-			])
+			]),
 		])
 	];
 });
