@@ -31,7 +31,7 @@ const AppContainer = Atom((props, children) =>
 const ActivePanelContainer = Atom((props, children) =>
 {
 	return Main({
-		class: 'active-panel-container flex flex-auto relative z-0 pb-[80px] md:pb-0',
+		class: 'active-panel-container flex flex-auto flex-col relative z-0 pb-[80px] md:pb-0',
 		...props,
 		children
 	});

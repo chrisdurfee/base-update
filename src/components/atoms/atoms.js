@@ -23,7 +23,7 @@ export const MainSection = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'section',
-		class: 'main-panel ' + (props.class || ''),
+		class: 'basic-page pt-[80px] sm:pt-0 flex flex-auto flex-col ' + (props.class || ''),
 		...props
 	}, children);
 });
@@ -34,3 +34,11 @@ export const MainTitle = (props) =>
 		H1(props)
 	]);
 };
+
+export const GridPanel = Atom((props, children) =>
+{
+	let span = (props.span)? 'span-' + props.span : '';
+	props.class = 'panel rounded-xl border bg-card text-card-foreground shadow ' + span;
+
+	return Div(props, children);
+});

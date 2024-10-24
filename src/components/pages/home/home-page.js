@@ -56,10 +56,10 @@ const data = () => (new Data({
  */
 export const HomePage = (props) => (
 	new Page({ mainClass: 'home-page', title: 'Title', data: data()}, [
-		Div({ class: 'row' }, [
-			Div({ class: 'col'}),
+		Div({ class: 'flex flex-auto w-full flex-col' }, [
+			Div({ class: 'flex'}),
 			Div({
-				class: 'col',
+				class: 'flex flex-auto',
 				onState: ['loaded', (val, ele, parent) =>
 				{
 					const props = { loadedCallBack: () => parent.state.toggle('loaded') };

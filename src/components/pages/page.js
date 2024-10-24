@@ -1,6 +1,19 @@
-import { Section } from '@base-framework/atoms';
-import { Component } from '@base-framework/base';
-import { MainSection, MainTitle } from '../atoms/atoms.js';
+import { H1, Header, P, Section } from '@base-framework/atoms';
+import { Atom, Component } from '@base-framework/base';
+import { MainSection } from '../atoms/atoms.js';
+
+/**
+ * This will create a header for the documentation.
+ *
+ * @param {object} props
+ * @returns {object}
+ */
+const PageHeader = Atom(({ title, description}) => (
+	Header({ class: 'sm:py-8 px-4 flex flex-col' }, [
+		H1({ class: 'scroll-m-20 text-3xl font-bold tracking-tight' }, title),
+		description && P({ class: 'text-base text-muted-foreground py-2 max-w-[700px]' }, description),
+	])
+));
 
 /**
  * Page
@@ -20,8 +33,11 @@ export class Page extends Component
 	render()
 	{
 		return MainSection({ class: `${this.mainClass} page`}, [
-			MainTitle(this.getTitle()),
-			Section({ class: 'body' }, this.children)
+			PageHeader({
+				title: this.getTitle(),
+				description: this.description
+			}),
+			Section({ class: 'body full-container flex flex-auto flex-col ' }, this.children)
 		]);
 	}
 
