@@ -19,9 +19,9 @@ const Items = [
     }
 ];
 
-const Item = (item) => Div({ class: 'item flex' }, [
-    Div({ class: 'name' }, item.name),
-    Div({ class: 'description' }, item.description)
+const Item = (item) => Div({ class: 'item flex flex-auto flex-row gap-4' }, [
+    Div({ class: 'flex name' }, item.name),
+    Div({ class: 'flex flex-auto description' }, item.description)
 ]);
 
 /**
