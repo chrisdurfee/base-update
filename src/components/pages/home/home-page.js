@@ -57,9 +57,8 @@ const data = () => (new Data({
 export const HomePage = (props) => (
 	new Page({ mainClass: 'home-page', title: 'Title', data: data()}, [
 		Div({ class: 'flex flex-auto w-full flex-col sm:flex-row' }, [
-			Div({ class: 'sm:flex flex-1 hidden'}),
 			Div({
-				class: 'flex flex-auto',
+				class: 'flex flex-auto w-full max-w-[1000px]',
 				onState: ['loaded', (val, ele, parent) =>
 				{
 					const props = { loadedCallBack: () => parent.state.toggle('loaded') };
@@ -69,7 +68,7 @@ export const HomePage = (props) => (
 						return LoadingCard(props);
 					}
 
-					return Div({ class: '[[firstName]]' }, [
+					return Div({ class: 'flex flex-auto flex-col [[firstName]]' }, [
 						SectionCards(props)
 					]);
 				}]

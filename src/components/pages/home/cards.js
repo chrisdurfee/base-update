@@ -15,7 +15,7 @@ import { TestModel } from './data/test-model.js';
 const Row = Atom((props, children) =>
 {
 	return {
-		class: 'row gap-2',
+		class: 'row gap-2 py-1',
 		...props,
 		children
 	};
