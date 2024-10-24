@@ -1,5 +1,5 @@
-import { Div, P } from '@base-framework/atoms';
-import { Component } from '@base-framework/base';
+import { Component } from "@base-framework/base";
+import { Div } from "../atoms/atoms.js";
 
 /**
  * Panel
@@ -11,16 +11,13 @@ import { Component } from '@base-framework/base';
  */
 export class Panel extends Component
 {
-    /**
-     * This will render the component.
-     *
-     * @return {object}
-     */
+	/**
+	 * This will render the component.
+	 *
+	 * @returns {object}
+	 */
 	render()
 	{
-		return Div( { class: 'panel' }, [
-            P(this.text),
-            ...(this.children || this.nest || [])
-        ]);
+		return Div({ class: 'panel-container py-8 px-1' }, this.children);
 	}
 }

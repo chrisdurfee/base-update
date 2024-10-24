@@ -56,8 +56,8 @@ const data = () => (new Data({
  */
 export const HomePage = (props) => (
 	new Page({ mainClass: 'home-page', title: 'Title', data: data()}, [
-		Div({ class: 'flex flex-auto w-full flex-col' }, [
-			Div({ class: 'flex'}),
+		Div({ class: 'flex flex-auto w-full flex-row' }, [
+			Div({ class: 'flex flex-1'}),
 			Div({
 				class: 'flex flex-auto',
 				onState: ['loaded', (val, ele, parent) =>

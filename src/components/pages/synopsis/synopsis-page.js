@@ -1,7 +1,7 @@
 import { Div } from '@base-framework/atoms';
 import { ButtonGroup } from '../../organisms/button-group.js';
 import { Panel } from '../../organisms/panel.js';
-import { Tab } from '../../organisms/tab.js';
+import { Tab } from '../../organisms/tabs/tab.js';
 import { Page } from '../page.js';
 
 /**
@@ -15,10 +15,7 @@ const TabPanel = (props) =>
     return {
         label: props.label,
         href: props.link,
-        component: new Panel(
-        {
-            text: props.text
-        })
+        component: new Panel({ class: 'p-8' }, props.children)
     };
 };
 
@@ -36,22 +33,22 @@ const SectionTabs = () =>
             TabPanel({
                 label: 'Story',
                 link: 'synopsis/story',
-                text: 'this would tell about the story'
+                children: 'this would tell about the story'
             }),
             TabPanel({
                 label: 'Book',
                 link: 'synopsis/book',
-                text: 'dud this come from a book?'
+                children: 'dud this come from a book?'
             }),
             TabPanel({
                 label: 'Concepts',
                 link: 'synopsis/concepts',
-                text: ''
+                children: ''
             }),
             TabPanel({
                 label: 'More',
                 link: 'synopsis/more',
-                text: 'More...'
+                children: 'More...'
             }),
             {
                 label: 'Super Tab',
@@ -66,12 +63,12 @@ const SectionTabs = () =>
                             TabPanel({
                                 label: 'Story',
                                 link: 'synopsis/super/first',
-                                text: 'First'
+                                children: 'First'
                             }),
                             TabPanel({
                                 label: 'Book',
                                 link: 'synopsis/super/second',
-                                text: 'Second'
+                                children: 'Second'
                             })
                         ]
                     }),
@@ -82,12 +79,12 @@ const SectionTabs = () =>
                             TabPanel({
                                 label: 'Third',
                                 link: 'synopsis/super/third',
-                                text: 'Third'
+                                children: 'Third'
                             }),
                             TabPanel({
                                 label: 'Fourth',
                                 link: 'synopsis/super/fourth',
-                                text: 'Fourth'
+                                children: 'Fourth'
                             })
                         ]
                     }),

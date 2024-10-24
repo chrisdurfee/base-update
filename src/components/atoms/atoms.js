@@ -23,8 +23,8 @@ export const MainSection = Atom((props, children) =>
 {
 	return Tag({
 		tag: 'section',
+		...props,
 		class: 'basic-page pt-[80px] sm:pt-0 flex flex-auto flex-col ' + (props.class || ''),
-		...props
 	}, children);
 });
 
