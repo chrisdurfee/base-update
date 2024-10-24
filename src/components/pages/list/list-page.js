@@ -1,8 +1,7 @@
 import { Div, H5 } from '@base-framework/atoms';
 import { Atom } from '@base-framework/base';
 import { List } from '@base-framework/organisms';
-import { Button } from '../../atoms/atoms.js';
-import { Card } from '../../organisms/organisms.js';
+import { Button } from '../../atoms/buttons/buttons.js';
 import { Page } from '../page.js';
 
 const Items = [
@@ -47,11 +46,11 @@ const ItemList = () => new List({
  */
 const Row = Atom((props, children) =>
 {
-	return {
-		class: 'row',
-		...props,
-		children
-	};
+    return {
+        class: 'row gap-2',
+        ...props,
+        children
+    };
 });
 
 /**
@@ -61,8 +60,8 @@ const Row = Atom((props, children) =>
  * @returns {object}
  */
 const Group = Atom((props, children) => (
-	Card([
-		H5(props.title),
+	Div({ class: 'flex flex-row' }, [
+		H5({ class: 'flex flex-auto text-2xl font-bold tracking-tight mb-2' }, props.title),
 		...children
 	])
 ));
@@ -77,9 +76,9 @@ const Group = Atom((props, children) => (
  */
 export const ListPage = (props) => (
 	new Page({ title: 'List' }, [
-		Div({ class: 'row' }, [
-			Div({ class: 'col'}),
-			Div({ class: 'col'}, [
+		Div({ class: 'row flex flex-auto flex-row' }, [
+			Div({ class: 'col flex flex-auto'}),
+			Div({ class: 'col flex flex-auto flex-col'}, [
                 Group({ title: 'Actions' }, [
                     Row([
                         Button({ click: (e, parent) => parent.list.prepend([
