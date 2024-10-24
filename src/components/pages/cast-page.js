@@ -11,10 +11,9 @@ import { ToDoApp } from './todo/todo-app.js';
  * @returns {object}
  */
 export const CastPage = (props) => (
-	new Page({ title: 'Cast' }, [
-		Div({ class: 'row' }, [
-			Div({ class: 'col'}),
-			Div({ class: 'col'}, [
+	new Page({ title: '' }, [
+		Div({ class: 'row flex flex-auto flex-col' }, [
+			Div({ class: 'col flex flex-auto flex-col p-4'}, [
 				new ToDoApp()
 			])
 		])
