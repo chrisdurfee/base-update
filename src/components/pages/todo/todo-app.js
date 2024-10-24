@@ -1,5 +1,6 @@
-import { Button, Div, Form, H1, Input, Li, Ul } from '@base-framework/atoms';
+import { Div, Form, H1, Input, Li, Ul } from '@base-framework/atoms';
 import { Data, Pod } from '@base-framework/base';
+import { Button } from '../../atoms/buttons/buttons.js';
 
 export const ToDoApp = Pod((self) =>
 {
@@ -20,14 +21,15 @@ export const ToDoApp = Pod((self) =>
     // handle item removal
     const handleRemove = (index, data) => data.splice('items', index);
 
-	return () => Div([
-        H1('To-Do App'),
-        Form({ submit: handleSubmit }, [
+	return () => Div({ class: 'flex flex-auto flex-col' }, [
+        H1({ class: 'flex text-2xl font-bold tracking-tight mb-4' }, 'To-Do App'),
+        Form({ class: 'flex flex-row gap-4', submit: handleSubmit }, [
             Input({ placeholder: 'Add a new item' }),
             Button({ type: 'submit' }, 'Add')
         ]),
         Ul({
             for: ['items', (text, index) => Li({
+                class: 'flex flex-row justify-between items-center max-w-72 m-2 p-2',
                 text,
                 button: Button({ click: (e, { data }) => handleRemove(index, data) }, 'Remove')
             })]
