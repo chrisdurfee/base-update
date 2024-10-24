@@ -42,10 +42,9 @@ const ActivePanelContainer = Atom((props, children) =>
  *
  * This will create the app shell.
  *
- * @param {object} props
  * @returns {object}
  */
-export const AppShell = (props) => (
+export const AppShell = () => (
 	AppContainer([
 		MobileHeader(),
 
