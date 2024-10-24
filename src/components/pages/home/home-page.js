@@ -56,8 +56,8 @@ const data = () => (new Data({
  */
 export const HomePage = (props) => (
 	new Page({ mainClass: 'home-page', title: 'Title', data: data()}, [
-		Div({ class: 'flex flex-auto w-full flex-row' }, [
-			Div({ class: 'flex flex-1'}),
+		Div({ class: 'flex flex-auto w-full flex-col sm:flex-row' }, [
+			Div({ class: 'sm:flex flex-1 hidden'}),
 			Div({
 				class: 'flex flex-auto',
 				onState: ['loaded', (val, ele, parent) =>
@@ -69,7 +69,7 @@ export const HomePage = (props) => (
 						return LoadingCard(props);
 					}
 
-					return Div({ class: 'container [[firstName]]' }, [
+					return Div({ class: '[[firstName]]' }, [
 						SectionCards(props)
 					]);
 				}]

@@ -38,7 +38,7 @@ const Label = Atom((props, children) => BaseLabel({ class: 'text-sm text-muted-f
  */
 const Group = Atom((props, children) => (
 	Card([
-		H5({ class: 'flex flex-auto text-2xl font-bold tracking-tight mb-2' }, props.title),
+		H5({ class: 'flex flex-auto text-xl font-bold tracking-tight mb-2' }, props.title),
 		...children
 	])
 ));
@@ -56,7 +56,7 @@ export const SectionCards = Atom((props) =>
 	return [
 		Group({ title: 'Property Watching' }, [
 			Row([
-				H2('[[firstName]] [[lastName]] is so cool.')
+				H2({ class: 'text-muted-foreground' }, '[[firstName]] [[lastName]] is so cool.')
 			])
 		]),
 		Group({ title: 'Property Binding' }, [
