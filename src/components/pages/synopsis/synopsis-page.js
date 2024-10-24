@@ -15,7 +15,7 @@ const TabPanel = (props) =>
     return {
         label: props.label,
         href: props.link,
-        component: new Panel({ class: 'p-8' }, props.children)
+        component: new Panel({ class: 'p-8 m-12' }, props.children)
     };
 };
 
@@ -54,7 +54,7 @@ const SectionTabs = () =>
                 label: 'Super Tab',
                 href: 'synopsis/super',
                 uri: 'synopsis/super*',
-                component: new Panel([
+                component: new Panel({ class: 'p-8 m-12' }, [
                     Div('before tab'),
                     new ButtonGroup(),
                     new Tab(
@@ -102,7 +102,7 @@ const SectionTabs = () =>
  */
 function getTitle()
 {
-    return ['Synopsis [[page]]', this.route]
+    //return ['Synopsis [[page]]', this.route]
 }
 
 /**
