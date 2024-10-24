@@ -47,7 +47,7 @@ const ItemList = () => new List({
 const Row = Atom((props, children) =>
 {
     return {
-        class: 'row gap-2',
+        class: 'inline-flex flex-auto flex-row gap-2 items-center',
         ...props,
         children
     };
@@ -61,7 +61,7 @@ const Row = Atom((props, children) =>
  */
 const Group = Atom((props, children) => (
 	Div({ class: 'flex flex-row' }, [
-		H5({ class: 'flex flex-auto text-2xl font-bold tracking-tight mb-2' }, props.title),
+		H5({ class: 'flex flex-auto text-2xl font-bold mb-2' }, props.title),
 		...children
 	])
 ));
@@ -77,8 +77,7 @@ const Group = Atom((props, children) => (
 export const ListPage = (props) => (
 	new Page({ title: 'List' }, [
 		Div({ class: 'row flex flex-auto flex-row' }, [
-			Div({ class: 'col flex flex-auto'}),
-			Div({ class: 'col flex flex-auto flex-col'}, [
+			Div({ class: 'col flex flex-auto flex-col p-4'}, [
                 Group({ title: 'Actions' }, [
                     Row([
                         Button({ click: (e, parent) => parent.list.prepend([
