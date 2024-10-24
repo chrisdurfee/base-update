@@ -1,7 +1,7 @@
 import { Component } from "@base-framework/base";
-import { Ul } from "../../atoms/atoms.js";
+import { Nav, Ul } from "../../atoms/atoms.js";
 import { MainLink } from "./main-link.js";
-import { Nav, NavigationGroup } from "./navigation-atoms.js";
+import { NavigationGroup } from "./navigation-atoms.js";
 
 /**
  * Navigation
@@ -14,7 +14,7 @@ export class Navigation extends Component
 	/**
 	 * This will render the component.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	render()
 	{
@@ -22,9 +22,13 @@ export class Navigation extends Component
 		 * This will get the options.
 		 */
 		const map = this.mapOptions(this.options);
+		const className = this.class || '';
 
-		return Nav({ class: 'navigation' }, [
-			Ul(map),
+		return Nav({ class: `navigation flex flex-auto flex-col ${className}` }, [
+			Ul({
+				class: 'relative group flex flex-col gap-2 py-2 px-2 list-none m-0',
+				map
+			}),
 			...this.addSubs()
 		]);
 	}
@@ -33,7 +37,7 @@ export class Navigation extends Component
 	 * This will get the options.
 	 *
 	 * @param {array} options
-	 * @return {array}
+	 * @returns {array}
 	 */
 	mapOptions(options)
 	{
@@ -44,7 +48,7 @@ export class Navigation extends Component
 	/**
 	 * This will get the subs.
 	 *
-	 * @return {array}
+	 * @returns {array}
 	 */
 	addSubs()
 	{
@@ -55,7 +59,7 @@ export class Navigation extends Component
 	 * This will add a group.
 	 *
 	 * @param {object} option
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addGroup(option)
 	{
@@ -67,7 +71,7 @@ export class Navigation extends Component
 	 * This will add a link.
 	 *
 	 * @param {object} option
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addLink(option)
 	{

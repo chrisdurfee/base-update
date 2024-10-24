@@ -1,6 +1,7 @@
 import { base, Builder } from "@base-framework/base";
 import { AppShell } from "./components/shell/app-shell.js";
 import { Configs } from "./configs.js";
+import { setupServiceWorker } from "./service.js";
 
 /**
  * AppController
@@ -28,7 +29,7 @@ export class AppController
 	{
 		this.setupService();
 		this.setupRouter();
-		this.setupAppShell();
+		this.renderApp();
 	}
 
 	/**
@@ -39,20 +40,7 @@ export class AppController
 	 */
 	setupService()
 	{
-		// service workers can only work on secure connections
-		const protocol = window.location.protocol.replace(':', '');
-		if (!('serviceWorker' in navigator) || protocol === 'http')
-		{
-			return false;
-		}
-
-		const sw = navigator.serviceWorker;
-		sw.register('./sw.js', {
-			scope: './'
-		}).then((serviceWorker) =>
-		{
-
-		});
+		setupServiceWorker();
 	}
 
 	/**
@@ -87,19 +75,9 @@ export class AppController
 	 * @protected
 	 * @return {void}
 	 */
-	setupAppShell()
+	renderApp()
 	{
-		const main = this.appShell = new AppShell();
+		const main = this.appShell = AppShell();
 		Builder.render(main, document.body);
-	}
-
-	/**
-	 * This will get the main body element.
-	 *
-	 * @return {object}
-	 */
-	getMainBody()
-	{
-		return this.appShell.getBodyPanel();
 	}
 }

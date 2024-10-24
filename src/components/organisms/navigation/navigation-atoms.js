@@ -1,32 +1,16 @@
+import { H4, Ul } from "@base-framework/atoms";
 import { Atom } from "@base-framework/base";
-import { H2, Ul } from "../../atoms/atoms.js";
 
 /**
  * This will return a navigation group.
  *
  * @param {object} props
  * @param {object} children
- * @return {object}
+ * @returns {object}
  */
 export const NavigationGroup = Atom(({ map }, children) =>
 {
-	return Ul({ class: 'navigation-group', map }, [
-		H2(children)
+	return Ul({ class: 'navigation-group flex flex-col gap-2 list-none m-0 py-2 px-0 border-t', map }, [
+		H4({ class: 'text-muted-foreground text-sm py-0 px-4 whitespace-nowrap' }, children)
 	]);
-});
-
-/**
- * This will return a navigation.
- *
- * @param {object} props
- * @param {object} children
- * @return {object}
- */
-export const Nav = Atom((props, children) =>
-{
-	return {
-		tag: 'nav',
-		...props,
-		children
-	};
 });

@@ -1,40 +1,30 @@
-import { A, Div } from "@base-framework/atoms";
+import { Div } from "@base-framework/atoms";
 import { Atom, Component } from "@base-framework/base";
-import { PrimaryNavigation } from "../../organisms/navigation/primary-navigation.js";
+import { InlineNavigation } from "../../organisms/navigation/inline-navigation.js";
+import { MainHeader } from "./main-header.js";
 
 /**
  * This will create the main navigation.
  *
  * @param {object} props
  * @param {array} children
- * @return {object}
+ * @returns {object}
  */
-const Navigation = Atom((props, children) =>
-{
-	props.class = 'main-navigation nav-container';
-
-	return {
-		...props,
-		children
-	};
-});
+const Navigation = Atom((props, children) => ({
+	...props,
+	class: 'main-navigation nav-container hidden lg:flex flex-col h-full z-10 overscroll-none',
+	children
+}));
 
 /**
- * This will create a logo.
+ * This will create the primary navigation.
  *
  * @param {object} props
- * @return {object}
+ * @returns {object}
  */
-const Logo = Atom((props, children) =>
-{
-	return A(
-	{
-		class: 'logo',
-		href: './',
-		...props,
-		children
-	});
-});
+const PrimaryNavigation = ({ options}) => (
+	new InlineNavigation({ options })
+);
 
 /**
  * MainNavigation
@@ -42,25 +32,36 @@ const Logo = Atom((props, children) =>
  * This will create the main navigation.
  *
  * @class
+ * @extends Component
  */
 export class MainNavigation extends Component
 {
 	/**
 	 * This will render the component.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	render()
 	{
 		return Navigation([
-			Logo(),
+			MainHeader({ callBack: () => this.state.toggle('pinned') }),
 			Div({ class: 'nav-container' }, [
-				new PrimaryNavigation(
-				{
-					options: this.options,
-					appNav: this.parent.panel
+				PrimaryNavigation({
+					options: this.options
 				})
 			])
 		]);
+	}
+
+	/**
+	 * This will link the pinned state to the app control.
+	 *
+	 * @returns {object}
+	 */
+	setupStates()
+	{
+		return {
+			pinned: { id: 'app-control' }
+		};
 	}
 }

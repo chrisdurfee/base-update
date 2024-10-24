@@ -1,19 +1,20 @@
+import { I, Span } from '@base-framework/atoms';
 import { Atom, Component, NavLink } from '@base-framework/base';
-import { Label, Span } from '../../atoms/atoms.js';
+import { Label } from '../../atoms/atoms.js';
+import { Icons } from '../../icons/icons.js';
 import { NavButtonLink } from './nav-button-link.js';
-
 
 /**
  * This will create a navigation option.
  *
  * @param {object} props
  * @param {array} children
- * @return {object}
+ * @returns {object}
  */
-const Option = Atom(({ options, click }, children) =>
+const Li = Atom(({ options, click }, children) =>
 {
 	const settings = {
-		class: `option${options ? ' sub' : ''}`,
+		class: `relative flex flex-row w-auto text-left border-none p-0 overflow-hidden transition-all cursor-pointer min-w-[48px] rounded-md option${options ? ' sub' : ''}`,
 		click
 	};
 
@@ -25,9 +26,43 @@ const Option = Atom(({ options, click }, children) =>
 });
 
 /**
+ * This will get the link content.
+ *
+ * @param {string} label
+ * @param {string} icon
+ * @param {boolean} hasChildren
+ * @returns {array}
+ */
+const LinkContent = (label, icon = null, hasChildren = false) => [
+	icon && I({
+		class: 'icon w-12 rounded-md flex items-center justify-center',
+		onState: ['selected', {
+			selected: true
+		}],
+		html: icon
+	}),
+	Label({ class: 'label flex flex-auto text-sm items-center cursor-pointer whitespace-nowrap' }, label),
+	hasChildren && Span(
+		{
+			class: 'flex justify-center items-center px-1 transition-all text-muted-foreground',
+			onState: [
+				['selected', {
+					rotate: true
+				}],
+				['active', {
+					rotate: true
+				}]
+			]
+		}, [
+		I({ html: Icons.chevron.single.down })
+	])
+];
+
+/**
  * MainLink
  *
  * This will setup a navigation link.
+ *
  * @class
  */
 export class MainLink extends Component
@@ -37,51 +72,33 @@ export class MainLink extends Component
 	 *
 	 * @override
 	 * @protected
-	 * @return {object}
+	 * @returns {object}
 	 */
 	render()
 	{
-		return Option(
-			{
-				options: this.options,
-				click: !this.options && this.callBack
-			},
-			[
+		const click = !this.options && this.callBack;
+		return Li({ options: this.options, click }, [
 				this.addLink()
 			]
 		);
 	}
 
 	/**
-	 * This will get the children.
-	 *
-	 * @return {array}
-	 * @protected
-	 */
-	getLinkChildren()
-	{
-		return [
-			this.icon && Span({
-				class: 'icon ' + this.icon
-			}),
-			Label({ class: 'label' }, this.label)
-		];
-	}
-
-	/**
 	 * This will add the link.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 * @protected
 	 */
 	addLink()
 	{
-		const children = this.getLinkChildren();
+		const hasChildren = this.options && this.options.length > 0;
+		const children = LinkContent(this.label, this.icon, hasChildren);
 
 		if (this.href)
 		{
 			return new NavLink(
 			{
+				class: 'flex flex-auto flex-row',
 				cache: 'link',
 				href: this.href,
 				activeClass: 'selected',
@@ -91,6 +108,7 @@ export class MainLink extends Component
 		}
 
 		return new NavButtonLink({
+			class: 'flex flex-auto flex-row',
 			cache: 'link',
 			children,
 			checkCallBack: this.checkCallBack

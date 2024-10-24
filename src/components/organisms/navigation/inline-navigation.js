@@ -1,7 +1,6 @@
-import { base } from '@base-framework/base';
-import { Ul } from '../../atoms/atoms.js';
+import { router } from '@base-framework/base';
+import { Nav, Ul } from '../../atoms/atoms.js';
 import { MainLink } from './main-link.js';
-import { Nav } from './navigation-atoms.js';
 import { Navigation } from './navigation.js';
 
 /**
@@ -18,7 +17,6 @@ export class InlineNavigation extends Navigation
 {
 	onCreated()
 	{
-		this.subs = [];
 		this.links = [];
 	}
 
@@ -51,8 +49,6 @@ export class InlineNavigation extends Navigation
 		 */
 		const sub = this.setupSubNav(link);
 		link.sub = sub;
-
-		this.subs.push(sub);
 		return sub;
 	}
 
@@ -60,7 +56,7 @@ export class InlineNavigation extends Navigation
 	 * This will add a link.
 	 *
 	 * @param {object} option
-	 * @return {object}
+	 * @returns {object}
 	 */
 	addLink(option)
 	{
@@ -82,6 +78,36 @@ export class InlineNavigation extends Navigation
 }
 
 /**
+ * This will validate if a path is active.
+ *
+ * @param {string} path
+ * @param {string} url
+ * @returns {boolean}
+ */
+const isPathActive = (path, url) => new RegExp(`${path}($|/|\\.).*`).test(url);
+
+/**
+ * This will check if a link is active.
+ *
+ * @param {object} link
+ * @param {string} url
+ * @returns {boolean}
+ */
+const isLinkActive = (link, url) =>
+{
+	const path = link.link.panel.pathname;
+	if (!path)
+	{
+		if (link.isSelected())
+		{
+			return true;
+		}
+	}
+
+	return link.exact? (url === path) : isPathActive(path, url);
+};
+
+/**
  * SubNavigation
  *
  * This will create a nested navigation.
@@ -93,15 +119,15 @@ export class SubNavigation extends InlineNavigation
 	/**
 	 * This will render the component.
 	 *
-	 * @return {object}
+	 * @returns {object}
 	 */
 	render()
 	{
-		const className = `navigation sub ${this.mainClassName || ''}`;
+		const className = `navigation flex flex-auto flex-col sub ${this.mainClassName || ''}`;
 		const map = this.mapOptions(this.options);
 
 		return Nav({ class: className, onState: this.onState() }, [
-			Ul([ ...map, ...this.addSubs(), this.addWatcher() ])
+			Ul({ class: 'relative group flex flex-col gap-2 py-2 px-0 list-none m-0' }, [ ...map, ...this.addSubs(), this.addWatcher() ])
 		]);
 	}
 
@@ -115,7 +141,7 @@ export class SubNavigation extends InlineNavigation
 	{
 		return {
 			watch: {
-				value: ['[[path]]', base.router.data],
+				value: ['[[path]]', router.data],
 				callBack: this.updateLinks.bind(this)
 			}
 		};
@@ -137,7 +163,7 @@ export class SubNavigation extends InlineNavigation
 	/**
 	 * This will set up the states.
 	 *
-	 * @return {array}
+	 * @returns {array}
 	 */
 	setupStates()
 	{
@@ -156,23 +182,13 @@ export class SubNavigation extends InlineNavigation
 	}
 
 	/**
-	 * This will check if the link is selected.
-	 *
-	 * @returns {boolean}
-	 */
-	isSelected()
-	{
-		return this.state.get('selected');
-	}
-
-	/**
 	 * This will update the links after setup.
 	 *
-	 * @return {void}
+	 * @returns {void}
 	 */
 	afterSetup()
 	{
-		const path = base.router.data.get('path');
+		const path = router.data.get('path');
 		this.updateLinks(path);
 	}
 
@@ -193,34 +209,13 @@ export class SubNavigation extends InlineNavigation
 				continue;
 			}
 
-			const path = link.link.panel.pathname;
-			if (!path)
-			{
-				if (link.isSelected())
-				{
-					check = true;
-					break;
-				}
-			}
-
-			check = link.exact? (value === path) : (new RegExp(`${path}($|/|\\.).*`).test(value));
+			check = isLinkActive(link, value);
 			if (check === true)
 			{
 				break;
 			}
 		}
 
-		this.updateParentLink(check);
-	}
-
-	/**
-	 * This will update the parent link.
-	 *
-	 * @param {boolean} selected
-	 * @returns {void}
-	 */
-	updateParentLink(selected)
-	{
-		this.parentLink.update(selected);
+		this.parentLink.update(check);
 	}
 }

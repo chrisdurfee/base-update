@@ -13,13 +13,14 @@ export class NavButtonLink extends Component
      * This will render the component.
      *
      * @override
-     * @return {object}
+     * @returns {object}
      */
 	render()
 	{
 		const state = this.state;
 
 		return {
+			class: this.class || '',
 			onState: [
 				['selected', {
 					selected: true
@@ -30,8 +31,7 @@ export class NavButtonLink extends Component
 			],
 			click: () =>
 			{
-				const value = !state.get('active');
-				state.set('active', value);
+				state.toggle('active');
 
 				if (!this.checkCallBack)
 				{
@@ -50,7 +50,7 @@ export class NavButtonLink extends Component
      *
      * @override
      * @protected
-     * @return {object}
+     * @returns {object}
      */
 	setupStates()
 	{
@@ -64,7 +64,7 @@ export class NavButtonLink extends Component
      * This will update the states.
      *
      * @param {object} selected
-     * @return {void}
+     * @returns {void}
      */
 	update(selected)
 	{
