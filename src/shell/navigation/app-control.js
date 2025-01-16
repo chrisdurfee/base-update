@@ -66,9 +66,17 @@ const mapMobileOptions = (options, mobileOptions, callBack) =>
 export class AppControl extends Component
 {
     /**
-     * @member {number|null} timer
+     * This will declare the properties of the component.
+     *
+     * @returns {void}
      */
-    timer = null;
+    declareProps()
+    {
+        /**
+         * @member {number|null} timer
+         */
+        this.timer = null;
+    }
 
     /**
      * This will set the app controll state to be stored in the local storage.
@@ -129,6 +137,9 @@ export class AppControl extends Component
     ignoreHover()
     {
         this.state.ignoreHover = true;
+
+        const DELAY_MILLISECONDS = 100;
+        window.setTimeout(() => this.removeIgnore(), DELAY_MILLISECONDS);
     }
 
     /**

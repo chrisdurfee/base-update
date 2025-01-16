@@ -28,4 +28,18 @@ export const Configs =
 	 * @type {boolean} useShortNav
 	 */
 	useShortNav: false,
+
+	/**
+	 * The push settings.
+	 */
+	push: {
+		publicId: ''
+	},
+
+	/**
+	 * This will set the API endpoints for the user status.
+	 *
+	 * @type {string} userStatusApi
+	 */
+	userStatusApi: '/api/use/status',
 };

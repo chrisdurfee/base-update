@@ -1,7 +1,9 @@
 import { Div } from "@base-framework/atoms";
 import { Atom, Component } from "@base-framework/base";
+import { Icons } from "@base-framework/ui/icons";
 import { InlineNavigation } from "@base-framework/ui/organisms";
 import { Configs } from "../../configs.js";
+import { NavigationAvatar } from "./avatars/navigation-avatar.js";
 import { MainHeader } from "./main-header.js";
 import { ShortNavigation } from "./short/short-navigation.js";
 
@@ -29,6 +31,37 @@ const PrimaryNavigation = ({ options }) => (
 );
 
 /**
+ * This will create the lower navigation.
+ *
+ * @returns {object}
+ */
+const LowerNavigation = () => (
+	Div([
+		new InlineNavigation({
+			options: [
+				{
+					content: [
+
+						/**
+						 * This will create the navigation avatar.
+						 */
+						new NavigationAvatar({
+							data: app.data.user
+						})
+					],
+					callBack: () => app.navigate('settings/profile')
+				},
+				{
+					href: 'settings',
+					label: 'Settings',
+					icon: Icons.cog.eight
+				}
+			]
+		})
+	])
+);
+
+/**
  * MainNavigation
  *
  * This will create the main navigation.
@@ -47,10 +80,11 @@ export class MainNavigation extends Component
 	{
 		return Navigation([
 			MainHeader({ callBack: () => this.state.toggle('pinned') }),
-			Div({ class: 'nav-container' }, [
+			Div({ class: 'nav-container flex flex-auto flex-col justify-between' }, [
 				PrimaryNavigation({
 					options: this.options
-				})
+				}),
+				LowerNavigation()
 			])
 		]);
 	}
