@@ -1,7 +1,7 @@
 import { base, Builder } from "@base-framework/base";
-import { AppShell } from "./components/shell/app-shell.js";
 import { Configs } from "./configs.js";
 import { setupServiceWorker } from "./service.js";
+import { AppShell } from "./shell/app-shell.js";
 
 /**
  * AppController

@@ -1,7 +1,7 @@
-import { CastPage } from '../pages/cast-page.js';
-import { HomePage } from '../pages/home/home-page.js';
-import { ListPage } from '../pages/list/list-page.js';
-import { SynopsisPage } from '../pages/synopsis/synopsis-page.js';
+import { CastPage } from '../components/pages/cast-page.js';
+import { HomePage } from '../components/pages/home/home-page.js';
+import { ListPage } from '../components/pages/list/list-page.js';
+import { SynopsisPage } from '../components/pages/synopsis/synopsis-page.js';
 
 /**
  * This will create a route object.

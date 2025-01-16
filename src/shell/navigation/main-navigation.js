@@ -1,6 +1,6 @@
 import { Div } from "@base-framework/atoms";
 import { Atom, Component } from "@base-framework/base";
-import { InlineNavigation } from "../../organisms/navigation/inline-navigation.js";
+import { InlineNavigation } from "@base-framework/ui/organisms";
 import { MainHeader } from "./main-header.js";
 
 /**

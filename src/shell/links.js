@@ -1,4 +1,4 @@
-import { Icons } from '../../components/icons/icons.js';
+import { Icons } from '@base-framework/ui/icons';
 
 /**
  * This will get the nav links.
