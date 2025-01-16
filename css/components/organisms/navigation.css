@@ -20,6 +20,7 @@
 
 .navigation .rotate {
 	transform: rotate(180deg);
+	transform-origin: 50% 50%;
 }
 
 .app-nav-container .navigation.sub .option>a.selected:before {
@@ -40,8 +41,8 @@
 
 .navigation li.option:hover,
 .navigation li.option:active,
-.mobile-navigation .active i {
-	@apply bg-muted;
+.mobile-link .active i {
+	@apply bg-accent;
 }
 
 .navigation li.option:hover,
@@ -52,7 +53,7 @@
 
 .navigation li .icon.selected,
 .navigation li i.selected,
-.mobile-navigation .active i {
+.mobile-link .active i {
 	@apply text-primary;
 }
 
@@ -68,6 +69,10 @@
 	margin-left: 0;
 }
 
+.mobile-popover-navigation {
+	backface-visibility: hidden;
+	transform: translateZ(0);
+}
 .navigation li.option .selected .label,
 .mobile-navigation .active span,
 .navigation li.option .active .label {
@@ -81,7 +86,7 @@
 }
 
 .navigation li.option .selected {
-	@apply bg-muted;
+	@apply bg-accent;
 }
 
 .aside-container .drawer h4 {
