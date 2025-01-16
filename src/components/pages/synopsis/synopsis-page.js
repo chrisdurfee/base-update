@@ -1,8 +1,7 @@
 import { Div } from '@base-framework/atoms';
+import { Panel, Tab } from '@base-framework/ui/organisms';
+import { Page } from '@base-framework/ui/pages';
 import { ButtonGroup } from '../../organisms/button-group.js';
-import { Panel } from '../../organisms/panel.js';
-import { Tab } from '../../organisms/tabs/tab.js';
-import { Page } from '../page.js';
 
 /**
  * This will create a tab panel.
