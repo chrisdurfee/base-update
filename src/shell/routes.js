@@ -1,42 +1,19 @@
-import { CastPage } from '../components/pages/cast-page.js';
-import { HomePage } from '../components/pages/home/home-page.js';
-import { ListPage } from '../components/pages/list/list-page.js';
-import { MusicPage } from '../components/pages/music/music-page/music-page.js';
-import { SynopsisPage } from '../components/pages/synopsis/synopsis-page.js';
-
-/**
- * This will create a route object.
- *
- * @param {string} uri
- * @param {function} component
- * @param {string} [title]
- * @return {object}
- */
-const Route = (uri, component, title) =>
-{
-	return {
-		uri,
-		component,
-		title,
-		persist: true
-	};
-};
-
 /**
  * This will create a dynamic route object.
  *
  * @param {string} uri
  * @param {function} callBack
  * @param {string} title
+ * @param {boolean} [persist=true]
  * @returns {object}
  */
-const DynamicRoute = (uri, callBack, title) =>
+const DynamicRoute = (uri, callBack, title, persist = true) =>
 {
 	return {
 		uri,
 		import: callBack,
 		title,
-		persist: false
+		persist
 	};
 };
 
@@ -46,10 +23,42 @@ const DynamicRoute = (uri, callBack, title) =>
  * @return {array}
  */
 export const Routes = () => [
-	Route('/', HomePage(), 'Example'),
+	DynamicRoute('/', () => import('../components/pages/home/home-page.js'), 'Example'),
+
+	/**
+	 * Music routes
+	 */
 	DynamicRoute('/music/album/:album?*', () => import('../components/pages/music/album-page/album-page.js'), 'Album'),
-	Route('/music*', MusicPage(), 'Music'),
-	Route('/synopsis/:page?*', SynopsisPage(), 'Synopsis'),
-	Route('/cast', CastPage(), 'Cast'),
-	Route('/list', ListPage(), 'Cast'),
+	DynamicRoute('/music*', () => import('../components/pages/music/music-page/music-page.js'), 'Music'),
+
+	/**
+	 * Orders routes
+	 */
+	DynamicRoute('/orders/orders-dashboard/:orderId?*', () => import('../components/pages/orders/orders-dashboard/orders-dashboard.js'), 'Orders'),
+
+	/**
+	 * Settings routes
+	 */
+	DynamicRoute('/settings/:page?*', () => import('../components/pages/settings/settings-page.js'), 'Settings'),
+
+	/**
+	 * Messages routes
+	 */
+	DynamicRoute('/messages/:page?/:messageId?*', () => import('../components/pages/messages/messages-page.js'), 'Messages'),
+
+	/**
+	 * Dashboard routes
+	 */
+	DynamicRoute('/dashboard/:page?*', () => import('../components/pages/dashboard/dashboard-page.js'), 'Messages'),
+
+	/**
+	 * Blog routes
+	 */
+	DynamicRoute('/blog/posts/:postId?*', () => import('../components/pages/blog/posts/post-page.js'), 'Post'),
+	DynamicRoute('/blog*', () => import('../components/pages/blog/blog-page.js'), 'Blog'),
+
+	/**
+	 * Inbox routes
+	 */
+	DynamicRoute('/inbox/:page?/:messageId?*', () => import('../components/pages/inbox/inbox-page.js'), 'Inbox'),
 ];
