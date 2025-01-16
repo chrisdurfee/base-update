@@ -1,7 +1,7 @@
 import { Div, Form, H1, I, Input, Li, Ul } from '@base-framework/atoms';
 import { Data, Pod } from '@base-framework/base';
-import { Button } from '../../atoms/buttons/buttons.js';
-import { Icons } from '../../icons/icons.js';
+import { Button } from '@base-framework/ui/atoms';
+import { Icons } from '@base-framework/ui/icons';
 
 export const ToDoApp = Pod((self) =>
 {
