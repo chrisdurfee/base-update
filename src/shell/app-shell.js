@@ -15,7 +15,7 @@ import { Routes } from './routes.js';
 const AppContainer = Atom((props, children) =>
 {
 	return {
-		class: 'app-container flex relative sm:h-screen',
+		class: 'shell flex relative sm:h-screen',
 		...props,
 		children
 	};

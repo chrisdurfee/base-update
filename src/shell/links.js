@@ -7,6 +7,7 @@ import { Icons } from '@base-framework/ui/icons';
  */
 export const Links = () => [
 	{ label: 'Home', href: './', icon: Icons.home, mobileOrder: 1, exact: true },
+    { label: 'Music', href: 'music', icon: Icons.music, mobileOrder: 2 },
     { label: 'Synopsis', href: 'synopsis', icon: Icons.chat.text, mobileOrder: 2 },
     { label: 'Cast', href: 'cast', icon: Icons.calendar.default, mobileOrder: 3 },
     { label: 'List', href: 'list', icon: Icons.star, mobileOrder: 4 },

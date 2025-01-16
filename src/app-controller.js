@@ -77,7 +77,14 @@ export class AppController
 	 */
 	renderApp()
 	{
-		const main = this.appShell = AppShell();
-		Builder.render(main, document.body);
+		const main = AppShell();
+		this.appShell = Builder.render(main, document.body);
+
+		/**
+		 * This will create an alias to make accessing the app shell root panel easier.
+		 *
+		 * This property should be used to add popovers, modals, overlays, etc.
+		 */
+		this.root = this.appShell.panel;
 	}
 }
