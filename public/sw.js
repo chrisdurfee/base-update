@@ -1,4 +1,4 @@
-importScripts('./worker/cache-controller.js', './worker/service.js');
+importScripts('./worker/cache-controller.js', './worker/service.js', './worker/push-controller.js');
 
 /**
  * This is the name of the app and the version. This is used to
