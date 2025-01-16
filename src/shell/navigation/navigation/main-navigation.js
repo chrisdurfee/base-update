@@ -1,7 +1,9 @@
 import { Div } from "@base-framework/atoms";
-import { Atom, Component } from "@base-framework/base";
+import { Atom, Jot } from "@base-framework/base";
+import { Icons } from "@base-framework/ui/icons";
 import { InlineNavigation } from "@base-framework/ui/organisms";
 import { Configs } from "../../configs.js";
+import { NavigationAvatar } from "./avatars/navigation-avatar.js";
 import { MainHeader } from "./main-header.js";
 import { ShortNavigation } from "./short/short-navigation.js";
 
@@ -24,8 +26,39 @@ const Navigation = Atom((props, children) => ({
  * @param {object} props
  * @returns {object}
  */
-const PrimaryNavigation = ({ options }) => (
+const PrimaryNavigation = ({ options, useShortNav }) => (
 	(Configs.useShortNav) ? new ShortNavigation({ options } ) : new InlineNavigation({ options })
+);
+
+/**
+ * This will create the lower navigation.
+ *
+ * @returns {object}
+ */
+const LowerNavigation = () => (
+	Div([
+		new InlineNavigation({
+			options: [
+				{
+					content: [
+
+						/**
+						 * This will create the navigation avatar.
+						 */
+						new NavigationAvatar({
+							data: app.data.user
+						})
+					],
+					callBack: () => app.navigate('settings/profile')
+				},
+				{
+					href: 'settings',
+					label: 'Settings',
+					icon: Icons.cog.eight
+				}
+			]
+		})
+	])
 );
 
 /**
@@ -36,7 +69,7 @@ const PrimaryNavigation = ({ options }) => (
  * @class
  * @extends Component
  */
-export class MainNavigation extends Component
+export const MainNavigation = Jot(
 {
 	/**
 	 * This will render the component.
@@ -47,23 +80,25 @@ export class MainNavigation extends Component
 	{
 		return Navigation([
 			MainHeader({ callBack: () => this.state.toggle('pinned') }),
-			Div({ class: 'nav-container' }, [
+			Div({ class: 'nav-container flex flex-auto flex-col justify-between' }, [
 				PrimaryNavigation({
+					useShortNav: this.useShortNav || false,
 					options: this.options
-				})
+				}),
+				LowerNavigation()
 			])
 		]);
-	}
+	},
 
 	/**
 	 * This will link the pinned state to the app control.
 	 *
 	 * @returns {object}
 	 */
-	setupStates()
+	state()
 	{
 		return {
 			pinned: { id: 'app-control' }
 		};
 	}
-}
+});

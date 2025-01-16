@@ -27,35 +27,6 @@ const AppContainer = Atom((props, children) => ({
 }));
 
 /**
- * This will map the mobile options.
- *
- * @param {array} options
- * @param {array} mobileOptions
- * @param {function} callBack
- * @returns {void}
- */
-const mapMobileOptions = (options, mobileOptions, callBack) =>
-{
-    options.forEach(option =>
-    {
-        if (option.options)
-        {
-            mapMobileOptions(option.options, mobileOptions, callBack);
-            return;
-        }
-
-        /**
-         * We also want to add a callBack to ignore the hover to the main options.
-         */
-        option.callBack = callBack;
-        if (option.mobileOrder !== undefined)
-        {
-            mobileOptions.push(option);
-        }
-    });
-};
-
-/**
  * AppControl
  *
  * This will create the app control.
@@ -66,9 +37,17 @@ const mapMobileOptions = (options, mobileOptions, callBack) =>
 export class AppControl extends Component
 {
     /**
-     * @member {number|null} timer
+     * This will declare the properties of the component.
+     *
+     * @returns {void}
      */
-    timer = null;
+    declareProps()
+    {
+        /**
+         * @member {number|null} timer
+         */
+        this.timer = null;
+    }
 
     /**
      * This will set the app controll state to be stored in the local storage.
@@ -115,6 +94,9 @@ export class AppControl extends Component
                 mouseleave: this.removeIgnore.bind(this)
             },
             [
+                /**
+                 * This will create a navigation for the main and mobile navigation.
+                 */
                 new MainNavigation({ options: this.options }),
                 new MobileNavigation({ options: mobileOptions })
             ]
@@ -129,6 +111,9 @@ export class AppControl extends Component
     ignoreHover()
     {
         this.state.ignoreHover = true;
+
+        const DELAY_MILLISECONDS = 100;
+        window.setTimeout(() => this.removeIgnore(), DELAY_MILLISECONDS);
     }
 
     /**
