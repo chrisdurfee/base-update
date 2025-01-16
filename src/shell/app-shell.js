@@ -1,8 +1,8 @@
-import { Main } from '@base-framework/atoms';
+import { Div } from '@base-framework/atoms';
 import { Atom } from '@base-framework/base';
+import { NotificationContainer } from "@base-framework/ui/molecules";
+import { AppContent } from './app-content.js';
 import { Links } from './links.js';
-import { AppControl } from './navigation/app-control.js';
-import { MobileHeader } from './navigation/mobile-header.js';
 import { Routes } from './routes.js';
 
 /**
@@ -12,29 +12,24 @@ import { Routes } from './routes.js';
  * @param {array} children
  * @returns {object}
  */
-const AppContainer = Atom((props, children) =>
+const Shell = Atom((props, children) =>
 {
-	return {
-		class: 'shell flex relative sm:h-screen',
-		...props,
-		children
-	};
-});
+	return Div({
+			...props,
+			class: 'shell flex flex-auto relative z-10',
 
-/**
- * This will create the active panel container.
- *
- * @param {object} props
- * @param {array} children
- * @returns {object}
- */
-const ActivePanelContainer = Atom((props, children) =>
-{
-	return Main({
-		class: 'active-panel-container flex flex-auto flex-col relative z-0 pb-[80px] md:pb-0',
-		...props,
-		children
-	});
+			// This will add a class of 'authed' if the user is signed in.
+			onState: ['isSignedIn', { authed: true }]
+		}, [
+			/**
+			 * This will set up the notification container so that it can be used
+			 * throughout the app.
+			 */
+			new NotificationContainer({
+				cache: 'notifications'
+			}),
+			...children
+	]);
 });
 
 /**
@@ -45,20 +40,10 @@ const ActivePanelContainer = Atom((props, children) =>
  * @returns {object}
  */
 export const AppShell = () => (
-	AppContainer([
-		MobileHeader(),
-
-		/**
-		 * This will add the desktop and mobile navigation.
-		 */
-		new AppControl({ options: Links() }),
-
-		/**
-		 * This will add the active panel container that will hold the main body.
-		 */
-		ActivePanelContainer({
-			switch: Routes(),
-			cache: 'mainBody'
+	Shell([
+		AppContent({
+			options: Links(),
+			routes: Routes()
 		})
 	])
 );
