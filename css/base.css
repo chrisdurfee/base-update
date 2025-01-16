@@ -20,6 +20,8 @@
 		--accent-foreground: 240 5.9% 10%;
 		--destructive: 0 72.22% 50.59%;
 		--destructive-foreground: 0 0% 98%;
+		--warning: 38 92% 50%;
+		--warning-foreground: 0 85.7% 97.3%;
 		--border: 240 5.9% 90%;
 		--input: 240 5.9% 90%;
 		--ring: 240 5% 64.9%;
@@ -32,7 +34,7 @@
 	}
 
 	@media (prefers-color-scheme: dark) {
-		:root {
+		:root:not(.light) {
 			--background: 240 10% 3.9%;
 			--foreground: 0 0% 98%;
 			--card: 240 10% 3.9%;
@@ -49,6 +51,8 @@
 			--accent-foreground: 0 0% 98%;
 			--destructive: 0 62.8% 30.6%;
 			--destructive-foreground: 0 85.7% 97.3%;
+			--warning: 38 92% 50%;
+			--warning-foreground: 0 0% 98%;
 			--border: 240 3.7% 15.9%;
 			--input: 240 3.7% 15.9%;
 			--ring: 240 4.9% 83.9%;
@@ -70,25 +74,36 @@
 		@apply bg-background text-foreground;
 		font-feature-settings: "rlig" 1, "calt" 1;
 	}
-}
 
+	::backdrop {
+		animation: shadowIn .2s ease forwards;
+		@apply bg-black/40;
+	}
+}
 
 html {
 	-webkit-overflow-scrolling: touch;
 }
 
 * {
+	/* overscroll-behavior: none; */
 	-webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 	-ms-overflow-style: -ms-autohiding-scrollbar;
 	box-sizing: border-box;
 }
 
-input, select, textarea {
-	@apply border-input bg-input rounded-sm p-2;
-}
-
 *:focus-visible {
 	@apply ring ring-ring outline-none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+	appearance: none;
 }
 
 /**
@@ -105,11 +120,20 @@ a:active {
 	text-decoration: none;
 }
 
+i.icon-size svg {
+	@apply w-auto h-auto;
+}
+
 /*
  * This will set the app padding to support the safe area.
  */
 .app-container {
 	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.active-panel-container {
+	backface-visibility: hidden;
+	transform: translateZ(0);
 }
 
 /**
@@ -119,14 +143,12 @@ a:active {
 @media (max-width: 640px) {
 
 	.app-container {
-		bottom: -1px;
+		padding-bottom: calc(env(safe-area-inset-bottom));
+	}
+
+	.app-container.authed {
 		padding-bottom: calc(56px + env(safe-area-inset-bottom));
 	}
-}
-
-.active-panel-container {
-	padding-left: env(safe-area-inset-left);
-	padding-right: env(safe-area-inset-right);
 }
 
 @media (min-width: 641px) {
