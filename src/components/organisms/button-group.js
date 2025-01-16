@@ -50,7 +50,7 @@ const ButtonText =
  * @class
  * @extends Component
  */
-export class ButtonGroup extends Component
+export default class ButtonGroup extends Component
 {
     /**
      * This will render the component.
@@ -59,7 +59,7 @@ export class ButtonGroup extends Component
      */
 	render()
 	{
-		return Buttons({ class: 'flex flex-auto flex-col md:flex-row md:justify-between' }, [
+		return Buttons({ class: 'flex flex-auto flex-col' }, [
 			P({
 				onState: ['performance', (state) => ButtonText[state] || ButtonText.fair]
 			}),

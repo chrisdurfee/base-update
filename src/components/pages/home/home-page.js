@@ -194,9 +194,9 @@ Builder.render(ToDoApp(), document.body);`)
 			]),
 
 			TextSection({
-				title: 'Example Platform',
+				title: 'Example App',
 			}, [
-				P({ class: 'text-base text-muted-foreground py-2 max-w-[700px]' }, "This app is an example of a platform that uses Base to render the app on the client-side. This responsive PWA (Progressive Web App) is installable and works on all devices. The app is built with Base and Tailwind CSS and is inspired by Shadcn UI. "),
+				P({ class: 'text-base text-muted-foreground py-2 max-w-[700px]' }, "This app is an example of an app that uses Base to render the on the client-side. This responsive PWA (Progressive Web App) is installable and works on all devices. The app is built with Base and Tailwind CSS and is inspired by Shadcn UI. "),
 				Div({ class: 'mt-10 flex items-center justify-start gap-x-4 pb-6' }, [
 					A({
 						href: 'https://ui.shadcn.com/',
