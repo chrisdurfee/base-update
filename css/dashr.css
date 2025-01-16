@@ -10,16 +10,17 @@
 /* atoms */
 @import url('components/atoms/atoms.css');
 @import url('components/atoms/buttons.css');
+@import url('components/atoms/form.css');
 
 /* molecules */
 @import url('components/molecules/molecules.css');
 @import url('components/molecules/mobile-header.css');
 @import url('components/molecules/app-navigation.css');
+@import url('components/molecules/modal.css');
 
 /* organisms */
 @import url('components/organisms/navigation.css');
 @import url('components/organisms/drawer-navigation.css');
-@import url('components/organisms/list.css');
 @import url('components/organisms/list.css');
 
 /* pages */
