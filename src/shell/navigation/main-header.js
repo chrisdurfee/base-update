@@ -9,18 +9,18 @@ import { Icons } from '@base-framework/ui/icons';
  * @returns {object}
  */
 const Logo = Atom((props, children) => (
-    A({
-        class: 'logo w-[32px] h-[32px] m-[16px] block',
-        href: './',
-        ...props,
-        children
-    })
+	A({
+		class: 'logo w-[32px] h-[32px] m-[16px] block',
+		href: './',
+		...props,
+		children
+	})
 ));
 
 /**
  * This will create a pin icon.
  *
- * @param {object} props
+ * @param {boolean} pinned
  * @returns {object}
  */
 const PinIcon = (pinned) => (pinned)? Icons.unlocked : Icons.locked;
@@ -34,12 +34,12 @@ const PinIcon = (pinned) => (pinned)? Icons.unlocked : Icons.locked;
  */
 const PinButton = Atom((props, children) =>
 {
-    return {
-        class: 'pin w-[32px] h-[32px] m-[16px] block cursor-pointer',
-        onState: ['pinned', (val) => (PinIcon(val))],
-        ...props,
-        children
-    };
+	return {
+		class: 'pin w-[32px] h-[32px] m-[16px] block cursor-pointer',
+		onState: ['pinned', (val) => (PinIcon(val))],
+		...props,
+		children
+	};
 });
 
 /**
@@ -49,8 +49,8 @@ const PinButton = Atom((props, children) =>
  * @returns {object}
  */
 export const MainHeader = (props) => (
-    Div({ class: 'flex flex-row justify-between min-w-[330px]'}, [
-        Logo({ src: props.src || '/images/logo.svg' }),
-        //PinButton({ click: props.callBack })
-    ])
+	Div({ class: 'flex flex-row justify-between min-w-[330px]'}, [
+		Logo({ src: props.src || '/images/logo.svg' }),
+		//PinButton({ click: props.callBack })
+	])
 );
