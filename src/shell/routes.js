@@ -13,14 +13,14 @@ const DynamicRoute = (uri, callBack, title, persist = true) =>
 		uri,
 		import: callBack,
 		title,
-		persist
+		persist: true
 	};
 };
 
 /**
  * This will get the routes.
  *
- * @return {array}
+ * @return {Array<object>}
  */
 export const Routes = () => [
 	DynamicRoute('/', () => import('../components/pages/home/home-page.js'), 'Example'),
