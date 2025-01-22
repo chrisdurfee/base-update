@@ -1,4 +1,4 @@
-import { Atom, Component } from "@base-framework/base";
+import { Atom, Component, Data } from "@base-framework/base";
 import { Configs } from "../../configs.js";
 import { MainNavigation } from "./main-navigation.js";
 import { getMobileOptions } from "./mobile-options.js";
@@ -108,6 +108,7 @@ export class AppControl extends Component
 	render()
 	{
         const callBack = this.ignoreHover.bind(this);
+        // @ts-ignore
         const mobileOptions = getMobileOptions(this.options, callBack);
 
 		return AppContainer(
@@ -123,6 +124,7 @@ export class AppControl extends Component
                 mouseleave: this.removeIgnore.bind(this)
             },
             [
+                // @ts-ignore
                 new MainNavigation({ options: this.options }),
                 new MobileNavigation({ options: mobileOptions })
             ]
