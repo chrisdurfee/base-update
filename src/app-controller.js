@@ -80,6 +80,8 @@ export class AppController
 	 */
 	setupRouter()
 	{
+		this.router = router;
+
 		/**
 		 * This will add the configs router settings
 		 * to the router.
