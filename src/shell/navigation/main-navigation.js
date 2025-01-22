@@ -82,6 +82,7 @@ export class MainNavigation extends Component
 			MainHeader({ callBack: () => this.state.toggle('pinned') }),
 			Div({ class: 'nav-container flex flex-auto flex-col justify-between' }, [
 				PrimaryNavigation({
+					// @ts-ignore
 					options: this.options
 				}),
 				LowerNavigation()

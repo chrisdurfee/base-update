@@ -58,8 +58,7 @@ const createOptions = (options) =>
  *
  * A short navigation component that displays a list of links.
  *
- * @class
- * @extends Component
+ * @type {typeof Component}
  */
 export const ShortNavigation = Jot(
 {
@@ -70,6 +69,7 @@ export const ShortNavigation = Jot(
 	 */
 	render()
 	{
+		// @ts-ignore
 		const options = this.options || [];
 
 		return Nav({ class: 'short-navigation flex flex-auto flex-col w-full h-full z-50' }, [
