@@ -1,4 +1,4 @@
-import { State, base } from "@base-framework/base";
+import { Events, State } from "@base-framework/base";
 import { Timer } from "@base-framework/organisms";
 import { APP_STATE, STATES, STATE_ATTR } from "./state.js";
 
@@ -117,7 +117,8 @@ export const ActionTimer =
 			for (let i = 0; i < events.length; i++)
 			{
 				const [eventNames, target, handler] = events[i];
-				base.on(eventNames, target, handler);
+				// @ts-ignore
+				Events.on(eventNames, target, handler);
 			}
 		};
 
@@ -126,7 +127,8 @@ export const ActionTimer =
 			for (let i = 0; i < events.length; i++)
 			{
 				const [eventNames, target, handler] = events[i];
-				base.off(eventNames, target, handler);
+				// @ts-ignore
+				Events.off(eventNames, target, handler);
 			}
 		};
 	},
