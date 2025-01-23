@@ -44,6 +44,7 @@ export const Routes = () => [
 	/**
 	 * Messages routes
 	 */
+	DynamicRoute('/messages/:page?/video/:roomId?*', () => import('../components/pages/video/video-chat-page.js'), 'Video Chat'),
 	DynamicRoute('/messages/:page?/:messageId?*', () => import('../components/pages/messages/messages-page.js'), 'Messages'),
 
 	/**
