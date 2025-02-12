@@ -7,13 +7,13 @@
  * @param {boolean} [persist=true]
  * @returns {object}
  */
-const DynamicRoute = (uri, callBack, title, persist = true) =>
+const DynamicRoute = (uri, callBack, title, persist = false) =>
 {
 	return {
 		uri,
 		import: callBack,
 		title,
-		persist: true
+		persist
 	};
 };
 
