@@ -15,7 +15,7 @@ import { TrackList } from "./track-list.js";
  */
 const AlbumPageContent = () => (
 	Div({ class: 'p-6 pt-0 2xl:mx-auto w-full 2xl:max-w-[1600px]' }, [
-		Div({ class: 'flex flex-auto flex-col lg:flex-row lg:space-x-8'}, [
+		Div({ class: 'flex flex-auto flex-col lg:flex-row lg:gap-x-8'}, [
 			OnRoute('album', (title) =>
 			{
 				const album = getAlbumByTitle(title);
@@ -25,14 +25,15 @@ const AlbumPageContent = () => (
 					Div({ class: 'w-full lg:w-1/3' }, [
 						Header({ class: 'flex flex-auto items-center mb-2' }, [
 							BackButton({
-								backUrl: 'music'
+								backUrl: 'music',
+								allowHistory: true
 							}),
 							H2({ class: 'text-lg md:text-2xl font-bold tracking-tight' }, album.artist),
 						]),
 						new AlbumCard({ src: album.src, title: album.title }),
 						AlbumDetails({ album }),
 					]),
-					Div({ class: 'flex-1 space-y-4' }, [
+					Div({ class: 'flex-1 gap-y-4' }, [
 						TrackList({ tracks: album.tracks })
 					])
 				];
